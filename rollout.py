@@ -1,4 +1,6 @@
+import roller
 import random
+import numpy as np
 
 from board import Board
 
@@ -13,20 +15,31 @@ def move_successful(b):
     return b.move_up() or random_horizontal(b) or b.move_down()
 
 
+def rolloutFromMovePython(b):
+    m = 0
+    while move_successful(b):
+        b.add_random()
+        m += 1
+    return m
+
 def rolloutFromMove(b):
-    if not move_successful(b):
-        return 0
-    return rollout(b)
+    m = roller.roller(b.board.tolist())
+    return m
 
-
-def rollout(b):
-    moves = 0
-    while b.add_random():
-        if not move_successful(b):
-            break
-        moves += 1
-    return moves
+def rolloutFromAppear(b):
+    b.add_random()
+    return rolloutFromMove((b))
 
 if __name__ == "__main__":
-    b = Board()
-    print(rollout(b))
+    a = np.array([[1,0,0,0],[4,0,1,0],[7,0,0,0],[10,0,0,0]])
+    s1 = 0
+    s2 = 0
+    for i in range(100):
+        b = Board(a)
+        m = rolloutFromMove(b)
+        s1 += m
+    for i in range(100):
+        b = Board(a)
+        m = rolloutFromMovePython(b)
+        s2 += m
+    print(s1, s2)

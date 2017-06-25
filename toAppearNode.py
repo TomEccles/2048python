@@ -1,6 +1,6 @@
 from indented_printer import IndentedPrinter
 from node import Node
-from rollout import rollout
+from rollout import rolloutFromAppear
 import toPlayNode
 
 
@@ -22,7 +22,7 @@ class ToAppearNode(Node):
         return (self.score + 1000) / (self.games + 1)
 
     def rollout(self):
-        return rollout(self.board.copy())
+        return rolloutFromAppear(self.board.copy())
 
     def getChildNodeToEvaluate(self):
         new_board = self.board.copy()

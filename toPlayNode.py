@@ -1,6 +1,6 @@
 from indented_printer import IndentedPrinter
 from node import Node
-from rollout import rolloutFromMove
+from rollout import *
 from toAppearNode import ToAppearNode
 
 
@@ -18,7 +18,7 @@ class ToPlayNode(Node):
             [c.print(depth + 1) for c in self.children]
 
     def rollout(self):
-        return rolloutFromMove(self.board.copy())
+        return rolloutFromMovePython(self.board.copy())
 
     def bestChild(self):
         options = self.get_possible_children()

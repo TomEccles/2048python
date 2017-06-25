@@ -17,4 +17,5 @@ def play_game(evals):
         moves += 1
     return moves, time.time() - start
 
-cProfile.run("play_game(10)")
+for i in range(100):
+    print(play_game(100))
