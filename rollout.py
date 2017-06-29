@@ -22,23 +22,30 @@ def rolloutFromMovePython(b):
         m += 1
     return m
 
-def rolloutFromMove(b):
+def rolloutFromMoveC(b):
     m = roller.roller(b.board.tolist())
     return m
+
+def rolloutFromMove(b):
+    return rolloutFromMoveC(b)
 
 def rolloutFromAppear(b):
     b.add_random()
     return rolloutFromMove((b))
 
 if __name__ == "__main__":
-    a = np.array([[1,0,0,0],[4,0,1,0],[7,0,0,0],[10,0,0,0]])
+    a = np.array([[1,4,7,10],[1,4,7,10],[1,4,7,10],[1,4,7,10]])
     s1 = 0
     s2 = 0
-    for i in range(100):
+    b = Board(a)
+    print(roller.greedy_move(b.board.tolist()))
+    move_successful(b)
+    print(b.board)
+    for i in range(1000):
         b = Board(a)
-        m = rolloutFromMove(b)
+        m = rolloutFromMoveC(b)
         s1 += m
-    for i in range(100):
+    for i in range(1000):
         b = Board(a)
         m = rolloutFromMovePython(b)
         s2 += m
