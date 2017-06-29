@@ -4,7 +4,7 @@ from functools import reduce
 
 
 def apply_to_rows_returning_or(array, fn):
-    return reduce(lambda a, b: a or fn(b), array, False)
+    return reduce(lambda a, b: fn(b) or a, array, False)
 
 
 def squish_uncached(array):
