@@ -1,12 +1,12 @@
 from indented_printer import IndentedPrinter
 from node import Node
-from rollout import rolloutFromAppear
-import toPlayNode
+from rollout import rollout_from_appear
+import to_play_node
 
 
 class ToAppearNode(Node):
-    def __init__(self, board, parent):
-        super().__init__(board, parent)
+    def __init__(self, board, parent, prior_weight):
+        super().__init__(board, parent, prior_weight)
         self.children = None
         self.nodeDict = dict()
 
@@ -18,11 +18,8 @@ class ToAppearNode(Node):
         if self.children is not None:
             [c.print(depth + 1) for c in self.children]
 
-    def value(self):
-        return (self.score + 1000) / (self.games + 1)
-
     def rollout(self):
-        return rolloutFromAppear(self.board.copy())
+        return rollout_from_appear(self.board.copy())
 
     def getChildNodeToEvaluate(self):
         new_board = self.board.copy()
@@ -32,12 +29,8 @@ class ToAppearNode(Node):
             return None
 
     def getOrCreateNode(self, new_board):
-        try:
-            node = self.nodeDict.get(new_board, None)
-        except ValueError:
-            a = 0
+        node = self.nodeDict.get(new_board, None)
         if node is None:
-            node = toPlayNode.ToPlayNode(new_board, self)
+            node = to_play_node.ToPlayNode(new_board, self, self.prior_weight)
             self.nodeDict[new_board] = node
         return node
-

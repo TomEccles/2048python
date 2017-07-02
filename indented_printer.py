@@ -1,4 +1,4 @@
-class IndentedPrinter():
+class IndentedPrinter:
     def __init__(self, depth):
         self.depth = depth
 

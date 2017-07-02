@@ -2,17 +2,17 @@ import roller
 import random
 import numpy as np
 
-from board import Board
+from board import Board, Move
 
 
 def random_horizontal(b):
     if b.can_move_top_row_right() or random.randint(0, 1) == 0:
-        return b.move_left() or b.move_right()
-    return b.move_right() or b.move_left()
+        return b.move(Move.left) or b.move(Move.right)
+    return b.move(Move.right) or b.move(Move.left)
 
 
 def move_successful(b):
-    return b.move_up() or random_horizontal(b) or b.move_down()
+    return b.move(Move.up) or random_horizontal(b) or b.move(Move.down)
 
 
 def rolloutFromMovePython(b):
@@ -22,25 +22,26 @@ def rolloutFromMovePython(b):
         m += 1
     return m
 
+
 def rolloutFromMoveC(b):
     m = roller.roller(b.board.tolist())
     return m
 
+
 def rolloutFromMove(b):
     return rolloutFromMoveC(b)
 
-def rolloutFromAppear(b):
+
+def rollout_from_appear(b):
     b.add_random()
-    return rolloutFromMove((b))
+    return rolloutFromMove(b)
+
 
 if __name__ == "__main__":
-    a = np.array([[1,4,7,10],[1,4,7,10],[1,4,7,10],[1,4,7,10]])
+    a = np.array([[1, 4, 7, 10], [1, 4, 7, 10], [1, 4, 7, 10], [1, 4, 7, 10]])
     s1 = 0
     s2 = 0
     b = Board(a)
-    print(roller.greedy_move(b.board.tolist()))
-    move_successful(b)
-    print(b.board)
     for i in range(1000):
         b = Board(a)
         m = rolloutFromMoveC(b)

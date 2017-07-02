@@ -1,6 +1,7 @@
-import numpy as np
 import random
 from functools import reduce
+
+import numpy as np
 
 
 def apply_to_rows_returning_or(array, fn):
@@ -44,8 +45,19 @@ class A(dict):
 squish_cache = A()
 
 
+class Move:
+    up = 0
+    left = 1
+    right = 2
+    down = 3
+
+
+all_moves = [Move.up, Move.left, Move.right, Move.down]
+
+
 class Board:
     """2048 board, with mutation methods to play a game"""
+
     def __init__(self, arr=None):
         self.board = np.zeros(shape=(4, 4), dtype=int) if arr is None else np.copy(arr)
 
@@ -74,48 +86,24 @@ class Board:
     def to_string(self):
         return np.array_str(self.board)
 
-    def move_left(self):
+    def move(self, move):
         """Modifies existing board"""
-        return apply_to_rows_returning_or(self.board, self.squish_cached)
-
-    def move_up(self):
-        """Modifies existing board"""
-        return apply_to_rows_returning_or(self.board.T, self.squish_cached)
-
-    def move_right(self):
-        """Modifies existing board"""
-        return apply_to_rows_returning_or(self.board, lambda i: self.squish_cached(i[::-1]))
-
-    def move_down(self):
-        """Modifies existing board"""
-        return apply_to_rows_returning_or(self.board.T, lambda i: self.squish_cached(i[::-1]))
-
-    def move_left_copy(self):
-        copy = self.copy()
-        change = copy.move_left()
-        return copy, change
-
-    def move_up_copy(self):
-        copy = self.copy()
-        change = copy.move_up()
-        return copy, change
-
-    def move_right_copy(self):
-        copy = self.copy()
-        change = copy.move_right()
-        return copy, change
-
-    def move_down_copy(self):
-        copy = self.copy()
-        change = copy.move_down()
-        return copy, change
+        if move == Move.up:
+            return apply_to_rows_returning_or(self.board.T, self.squish_cached)
+        elif move == Move.down:
+            return apply_to_rows_returning_or(self.board.T, lambda i: self.squish_cached(i[::-1]))
+        elif move == Move.left:
+            return apply_to_rows_returning_or(self.board, self.squish_cached)
+        elif move == Move.right:
+            return apply_to_rows_returning_or(self.board, lambda i: self.squish_cached(i[::-1]))
 
     def can_move_top_row_right(self):
         """A cached squish"""
         top_row = self.board[0][::-1]
         return squish_cache[tuple(top_row)][1]
 
-    def squish_cached(self, row):
+    @staticmethod
+    def squish_cached(row):
         b = tuple(row)
         row[:], result = squish_cache[b]
         return result
