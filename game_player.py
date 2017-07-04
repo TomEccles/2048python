@@ -55,7 +55,7 @@ def train_indefinitely(predictor, game_batch, passes, valid_batch, path="."):
     while True:
         count += 1
         boards, labels, results = get_data(game_batch, predictor, path + "/output/results_iter_%i.txt" % count)
-        b_val, l_val, r_val = get_data(valid_batch)
+        b_val, l_val, r_val = get_data(valid_batch, predictor)
         predictor.feed_observations(numpy.array([board_as_feature_array(board) for board in boards]),
                                     numpy.array([move_as_one_hot_encoding(l) for l in labels]),
                                     passes)
