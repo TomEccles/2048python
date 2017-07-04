@@ -2,8 +2,8 @@ from to_play_node import ToPlayNode
 
 
 class MovePlayer:
-    def __init__(self, board, prior_weight):
-        self.root = ToPlayNode(board, None, prior_weight=prior_weight)
+    def __init__(self, board, prior_weight, predictor):
+        self.root = ToPlayNode(board, None, prior_weight, predictor)
 
     def evaluate(self):
         self.root.evaluate()

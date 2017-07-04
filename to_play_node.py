@@ -2,14 +2,13 @@ from board import all_moves
 from board_features import board_as_feature_array
 from indented_printer import IndentedPrinter
 from node import Node
-from predict_moves import run_forward
 from rollout import *
 from to_appear_node import ToAppearNode
 
 
 class NodeWithPrior(ToAppearNode):
-    def __init__(self, board, parent, prior, prior_weight):
-        super().__init__(board, parent, prior_weight)
+    def __init__(self, board, parent, prior, prior_weight, predictor):
+        super().__init__(board, parent, prior_weight, predictor)
         self.prior = prior
 
     def value(self):
@@ -17,8 +16,8 @@ class NodeWithPrior(ToAppearNode):
 
 
 class ToPlayNode(Node):
-    def __init__(self, board, parent, prior_weight, is_root=False):
-        super().__init__(board, parent, prior_weight)
+    def __init__(self, board, parent, prior_weight, predictor, is_root=False):
+        super().__init__(board, parent, prior_weight, predictor)
         self.children = None
         self.is_root = is_root
 
@@ -46,13 +45,13 @@ class ToPlayNode(Node):
             return self.children
 
         # Bias the evaluation towards likely candidates - unless we're the root node, in which case we should be fair
-        priors = run_forward(board_as_feature_array(self.board)) if not self.is_root else [0.25 for _ in all_moves]
+        priors = self.predictor.run_forward(board_as_feature_array(self.board)) if not self.is_root else [0.25 for _ in all_moves]
 
         boards = []
         for move in all_moves:
             copy = self.board.copy()
             if copy.move(move):
                 boards.append((copy, priors[move]))
-        self.children = [NodeWithPrior(board, self, prior, self.prior_weight) for board, prior in boards]
+        self.children = [NodeWithPrior(board, self, prior, self.prior_weight, self.predictor) for board, prior in boards]
 
         return self.children

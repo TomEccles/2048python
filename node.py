@@ -2,13 +2,14 @@ from board import Board
 
 
 class Node(object):
-    def __init__(self, board: Board, parent, prior_weight):
+    def __init__(self, board: Board, parent, prior_weight, predictor):
         self.board = board
         self.parent = parent
         self.score = 0
         self.games = 0
         self.children = None
         self.prior_weight = prior_weight
+        self.predictor = predictor
 
     def evaluate(self):
         if self.score == 0:

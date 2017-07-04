@@ -1,25 +1,23 @@
-import random
+import pickle
 import time
 
 import numpy
-import os
-import pickle
 
+import predict_moves
 from board import Board, all_moves
 from board_features import board_as_feature_array, move_as_one_hot_encoding
 from file_utils import open_creating_dir_if_needed
 from move_player import MovePlayer
-import predict_moves
 
 
-def play_game(evals, prior_weight=200):
+def play_game(evals, predictor, prior_weight=200):
     boards = []
     labels = []
     b = Board()
     moves = 0
     start = time.time()
     while b.add_random():
-        updated_board = MovePlayer(b, prior_weight).play(evals)
+        updated_board = MovePlayer(b, prior_weight, predictor).play(evals)
         if updated_board is None:
             break
 
@@ -37,12 +35,12 @@ def play_game(evals, prior_weight=200):
     return moves, time.time() - start, boards, labels
 
 
-def get_data(n, results_file=None):
+def get_data(n, predictor, results_file=None):
     d = []
     l = []
     r = []
     for _ in range(n):
-        moves, t, boards, labels = play_game(100)
+        moves, t, boards, labels = play_game(100, predictor)
         d = d + boards
         l = l + labels
         r.append(moves)
@@ -52,20 +50,20 @@ def get_data(n, results_file=None):
     return d, l, r
 
 
-def train_indefinitely(game_batch, passes, valid_batch, path = "."):
+def train_indefinitely(predictor, game_batch, passes, valid_batch, path="."):
     count = 0
     while True:
         count += 1
-        boards, labels, results = get_data(game_batch, path + "/output/results_iter_%i.txt" % count)
+        boards, labels, results = get_data(game_batch, predictor, path + "/output/results_iter_%i.txt" % count)
         b_val, l_val, r_val = get_data(valid_batch)
-        predict_moves.feed_observations(numpy.array([board_as_feature_array(board) for board in boards]),
-                                        numpy.array([move_as_one_hot_encoding(l) for l in labels]),
-                                        passes)
-        predict_moves.validate_observations(numpy.array([board_as_feature_array(board) for board in b_val]),
-                                            numpy.array([move_as_one_hot_encoding(l) for l in l_val]))
-        predict_moves.save(path + "/checkpoints/checkpoint_iter_%i.ckpt" % count)
+        predictor.feed_observations(numpy.array([board_as_feature_array(board) for board in boards]),
+                                    numpy.array([move_as_one_hot_encoding(l) for l in labels]),
+                                    passes)
+        predictor.validate_observations(numpy.array([board_as_feature_array(board) for board in b_val]),
+                                        numpy.array([move_as_one_hot_encoding(l) for l in l_val]))
+        predictor.save(path + "/checkpoints/checkpoint_iter_%i.ckpt" % count)
         with open_creating_dir_if_needed(path + "/output/data_iter_%i.txt" % count, "wb") as file:
-            pickle.dump([boards, labels, results],  file)
+            pickle.dump([boards, labels, results], file)
 
 
 def pickle_data(n, filename):
@@ -80,13 +78,27 @@ def pickle_load(filename):
     return d, l, r
 
 
-# file_100_vanilla = "./output/data_1"
-# pickle_data(100, file_100_vanilla)
-# d, l, r = pickle_load(file_100_vanilla)
+def load_vanilla_data_and_train():
+    file_vanilla = "./runs/vanilla/output/data"
+    # pickle_data(500, file_vanilla)
+    d, l, r = pickle_load(file_vanilla)
+    print(len(d), len(l), len(r), d[0], l[0], r[0])
+    predictor = predict_moves.PriorNet()
+    split = int(len(d) * 0.9)
+    predictor.feed_observations(numpy.array([board_as_feature_array(board) for board in d[:split]]),
+                                numpy.array([move_as_one_hot_encoding(l) for l in l[:split]]),
+                                10)
+    predictor.validate_observations(numpy.array([board_as_feature_array(board) for board in d[split:]]),
+                                    numpy.array([move_as_one_hot_encoding(l) for l in l[split:]]))
+    predictor.save("./runs/vanilla/checkpoints/priors.ckpt")
 
-predict_moves.load("./checkpoints/checkpoint_iter_7.ckpt")
 
-path = "./runs/run%02d" % time.time()
-print(path)
+def main():
+    predictor = predict_moves.PriorNet()
+    predictor.load("./runs/vanilla/checkpoints/priors.ckpt")
 
-train_indefinitely(10, 10, 1, path)
+    path = "./runs/run%02d" % time.time()
+
+    train_indefinitely(predictor, 100, 4, 10, path)
+
+main()
