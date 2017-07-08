@@ -52,9 +52,9 @@ class ToPlayNode(Node):
 
         boards = []
         for move in all_moves:
-            copy = self.board.copy()
-            if copy.move(move):
-                boards.append((copy, priors[move]))
+            moved = self.board.move(move)
+            if moved != self.board:
+                boards.append((moved, priors[move]))
         self.children = [NodeWithPrior(board, self, prior, self.nets) for board, prior in boards]
 
         return self.children

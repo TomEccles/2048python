@@ -5,24 +5,6 @@ import numpy as np
 from board import Board, Move
 
 
-def random_horizontal(b):
-    if b.can_move_top_row_right() or random.randint(0, 1) == 0:
-        return b.move(Move.left) or b.move(Move.right)
-    return b.move(Move.right) or b.move(Move.left)
-
-
-def move_successful(b):
-    return b.move(Move.up) or random_horizontal(b) or b.move(Move.down)
-
-
-def rolloutFromMovePython(b):
-    m = 0
-    while move_successful(b):
-        b.add_random()
-        m += 1
-    return m
-
-
 def rolloutFromMoveC(b):
     m = roller.roller(b.board.tolist())
     return m

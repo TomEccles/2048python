@@ -70,15 +70,21 @@ class Board:
     def copy(self):
         return Board(self.board)
 
+    def can_add_random(self):
+        (first, second) = np.where(self.board == 0)
+        return first.size > 0
+
     def add_random(self):
-        """Add 1 (90%) or 2 (10%) to a random empty square. Modifies existing object"""
+        """Add 1 (90%) or 2 (10%) to a random empty square"""
         (first, second) = np.where(self.board == 0)
         if first.size == 0:
-            return False
+            raise Exception("Can't add to full board")
         index = random.randint(0, len(first) - 1)
         new = 1 if random.random() < 0.9 else 2
-        self.board[first[index]][second[index]] = new
-        return True
+
+        copy = self.copy()
+        copy.board[first[index]][second[index]] = new
+        return copy
 
     def print(self):
         print(self.to_string())
@@ -87,7 +93,12 @@ class Board:
         return np.array_str(self.board)
 
     def move(self, move):
-        """Modifies existing board"""
+        copy = self.copy()
+        copy.__move_in_place(move)
+        return copy
+
+    def __move_in_place(self, move):
+        """Returns a new copy"""
         if move == Move.up:
             return apply_to_rows_returning_or(self.board.T, self.squish_cached)
         elif move == Move.down:

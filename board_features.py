@@ -12,9 +12,7 @@ def non_zero(array):
 
 
 def can_move(board, move):
-    copy = board.copy()
-    copy.move(move)
-    return copy != board
+    return board.move(move) != board
 
 
 def possible_moves(board):
@@ -38,9 +36,9 @@ def move_as_one_hot_encoding(move):
 
 def main():
     board = Board()
-    board.add_random()
-    board.add_random()
-    board.move(Move.up)
+    board = board.add_random()
+    board = board.add_random()
+    board = board.move(Move.up)
     board.print()
     print(board_as_feature_array(board))
     print(board_as_feature_array_with_sum(board))

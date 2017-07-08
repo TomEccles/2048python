@@ -20,19 +20,18 @@ def play_game(evals, nets):
     b = Board()
     moves = 0
     start = time.time()
-    while b.add_random():
+    while b.can_add_random():
+        b.add_random()
         updated_board = MovePlayer(b, nets).play(evals)
         if updated_board is None:
             break
 
         for move in all_moves:
-            copy = b.copy()
-            copy.move(move)
-            if copy == updated_board:
-                to_move_boards.append(b.copy())
+            if b.move(move) == updated_board:
+                to_move_boards.append(b)
                 labels.append(move)
-                b.move(move)
-                to_appear_boards.append(b.copy())
+                b = b.move(move)
+                to_appear_boards.append(b)
                 moves += 1
                 break
         else:

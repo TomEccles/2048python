@@ -22,9 +22,8 @@ class ToAppearNode(Node):
         return rollout_from_appear(self.board.copy())
 
     def getChildNodeToEvaluate(self):
-        new_board = self.board.copy()
-        if new_board.add_random():
-            return self.getOrCreateNode(new_board)
+        if self.board.can_add_random():
+            return self.getOrCreateNode(self.board.add_random())
         else:
             return None
 
