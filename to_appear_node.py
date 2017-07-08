@@ -5,8 +5,8 @@ import to_play_node
 
 
 class ToAppearNode(Node):
-    def __init__(self, board, parent, prior_weight, predictor):
-        super().__init__(board, parent, prior_weight, predictor)
+    def __init__(self, board, parent, nets):
+        super().__init__(board, parent, nets)
         self.children = None
         self.nodeDict = dict()
 
@@ -31,6 +31,6 @@ class ToAppearNode(Node):
     def getOrCreateNode(self, new_board):
         node = self.nodeDict.get(new_board, None)
         if node is None:
-            node = to_play_node.ToPlayNode(new_board, self, self.prior_weight, self.predictor)
+            node = to_play_node.ToPlayNode(new_board, self, self.nets)
             self.nodeDict[new_board] = node
         return node

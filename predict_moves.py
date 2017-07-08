@@ -75,7 +75,7 @@ with prior_graph.as_default():
     optimizer = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
 
-class PriorNet:
+class PriorNet(object):
     def __init__(self):
         self.session = tf.Session(graph=prior_graph)
         with prior_graph.as_default():

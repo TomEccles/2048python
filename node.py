@@ -2,14 +2,13 @@ from board import Board
 
 
 class Node(object):
-    def __init__(self, board: Board, parent, prior_weight, predictor):
+    def __init__(self, board: Board, parent, nets):
         self.board = board
         self.parent = parent
         self.score = 0
         self.games = 0
         self.children = None
-        self.prior_weight = prior_weight
-        self.predictor = predictor
+        self.nets = nets
 
     def evaluate(self):
         if self.score == 0:
@@ -19,6 +18,8 @@ class Node(object):
             child = self.getChildNodeToEvaluate()
             if child is not None:
                 child.evaluate()
+            else:
+                self.registerScore(0)
 
     def registerScore(self, value):
         self.score += value
