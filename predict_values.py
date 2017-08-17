@@ -86,9 +86,9 @@ class ValuerNet:
         print("Validation loss, root mean square: %.4f %.4f" % (l, l**.5))
 
 
-    def run_forward(self, data_point):
-        p = self.session.run([predictions], {X: [data_point]})
-        return p[0][0]
+    def run_forward(self, input):
+        p = self.session.run([predictions], {X: input, keep_param: 1})
+        return p[0]
 
     def load(self, save_path):
         with entropy_graph.as_default():

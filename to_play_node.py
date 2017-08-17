@@ -6,9 +6,9 @@ from rollout import *
 from to_appear_node import ToAppearNode
 
 
-class NodeWithPrior(ToAppearNode):
-    def __init__(self, board, parent, prior, nets):
-        super().__init__(board, parent, nets)
+class NodeWithPriorAndValue(ToAppearNode):
+    def __init__(self, board, parent, prior, value, nets):
+        super().__init__(board, parent, value, nets)
         self.prior = prior
 
     def value(self):
@@ -16,10 +16,9 @@ class NodeWithPrior(ToAppearNode):
 
 
 class ToPlayNode(Node):
-    def __init__(self, board, parent, nets, is_root=False):
+    def __init__(self, board, parent, nets):
         super().__init__(board, parent, nets)
         self.children = None
-        self.is_root = is_root
 
     def print(self, depth):
         printer = IndentedPrinter(depth)
@@ -45,16 +44,16 @@ class ToPlayNode(Node):
             return self.children
 
         # Bias the evaluation towards likely candidates - unless we're the root node, in which case we should be fair
-        priors = \
-            self.nets.get_priors(self.board.board) \
-            if not self.is_root \
-            else [0.25 for _ in all_moves]
+        priors = self.nets.get_priors(self.board)
 
         boards = []
         for move in all_moves:
             moved = self.board.move(move)
             if moved != self.board:
                 boards.append((moved, priors[move]))
-        self.children = [NodeWithPrior(board, self, prior, self.nets) for board, prior in boards]
+        values = self.nets.get_values([board[0] for board in boards])
+
+        self.children = [NodeWithPriorAndValue(board_and_prior[0], self, board_and_prior[1], value, self.nets) for
+                         board_and_prior, value in zip(boards,values)]
 
         return self.children

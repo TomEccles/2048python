@@ -70,6 +70,10 @@ class Board:
     def copy(self):
         return Board(self.board)
 
+    def nonzeroes(self):
+        (first, second) = np.where(self.board != 0)
+        return first.size
+
     def can_add_random(self):
         (first, second) = np.where(self.board == 0)
         return first.size > 0

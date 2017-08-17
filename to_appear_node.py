@@ -5,10 +5,11 @@ import to_play_node
 
 
 class ToAppearNode(Node):
-    def __init__(self, board, parent, nets):
+    def __init__(self, board, parent, value, nets):
         super().__init__(board, parent, nets)
         self.children = None
         self.nodeDict = dict()
+        self.evaluated_value = value
 
     def print(self, depth):
         printer = IndentedPrinter(depth)
@@ -19,7 +20,7 @@ class ToAppearNode(Node):
             [c.print(depth + 1) for c in self.children]
 
     def rollout(self):
-        return rollout_from_appear(self.board.copy())
+        return rollout_from_appear(self.board.copy()) + self.evaluated_value*self.nets.value_weight
 
     def getChildNodeToEvaluate(self):
         if self.board.can_add_random():
