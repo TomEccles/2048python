@@ -6,6 +6,7 @@ from file_utils import open_creating_dir_if_needed
 from move_player import MovePlayer
 from nets import Nets
 
+runs_root = "../results/runs"
 
 def play_game(evals, nets):
     to_move_boards = []
@@ -79,18 +80,18 @@ def load_vanilla_data_and_train(file):
     end = feed_obs + valid_obs
     nets.feed_observations(d[:feed_obs], l[:feed_obs], a[:feed_obs], 10)
     nets.validate_observations(d[feed_obs:end], l[feed_obs:end], a[feed_obs:end])
-    nets.save("./runs/vanilla/checkpoints/predict.ckpt", "./runs/vanilla/checkpoints/value.ckpt")
+    nets.save(runs_root + "/vanilla/checkpoints/predict.ckpt", runs_root + "/vanilla/checkpoints/value.ckpt")
 
 
 def test_outputs():
-    load_path = "./runs/run1499671533/checkpoints/"
-    run_path = "./runs/test100/"
+    load_path = runs_root + "/run1499671533/checkpoints/"
+    run_path = runs_root + "/test100/"
     turns = 100
     while True:
         nets = Nets(100, 10, load_path + "predict_iter_11.ckpt", load_path + "value_iter_11.ckpt")
         get_data(10, nets, turns, run_path + "last_iter.txt")
 
-        nets = Nets(0, 0, "./runs/vanilla/checkpoints/predict.ckpt", "./runs/vanilla/checkpoints/value.ckpt")
+        nets = Nets(0, 0, runs_root + "/vanilla/checkpoints/predict.ckpt", runs_root + "/vanilla/checkpoints/value.ckpt")
         get_data(10, nets, turns, run_path + "control.txt")
 
         # nets = Nets(100, 10, "./runs/vanilla/checkpoints/predict.ckpt", "./runs/vanilla/checkpoints/value.ckpt")
@@ -104,16 +105,16 @@ def test_outputs():
 
 
 def train_from_vanilla():
-    vanilla_data_path = "./runs/vanilla/output/data_2"
+    vanilla_data_path = runs_root + "/vanilla/output/data_2"
     load_vanilla_data_and_train(vanilla_data_path)
-    run_path = "./runs/run%f/" % time.time()
+    run_path = runs_root + "/run%f/" % time.time()
     nets = Nets(100, 10)
-    train(nets, game_batch=100, turns=100, passes=2, valid_batch=10, path=run_path, runs=1)
+    train(nets, game_batch=1, turns=1, passes=1, valid_batch=1, path=run_path, runs=1)
 
 
 def run_one_game():
     path = "./runs/test/"
-    nets = Nets(10, 10, "./runs/vanilla/checkpoints/predict.ckpt", "./runs/vanilla/checkpoints/value.ckpt")
+    nets = Nets(10, 10, runs_root + "/vanilla/checkpoints/predict.ckpt", runs_root + "/vanilla/checkpoints/value.ckpt")
     get_data(1, nets, 100, path + "control.txt")
 
 

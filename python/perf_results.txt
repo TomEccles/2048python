@@ -1,0 +1,629 @@
+CProfile run below is of a 100-eval game with value and prior nets. Very roughly:
+60% of the time is in value net
+20% of the time is in prior net
+15% of the time is in tree management
+5% of the time is in rollouts
+
+Thoughts:
+- rollouts are cheap. More per valuation?
+- valuing is expensive; and we do it one at a time. Value all children of a move node up front?
+-- Did this. Speedup is around 20%
+- No single bottleneck is going to help lots and lots
+
+C:\Users\TomEccles\AppData\Local\Programs\Python\Python35\python.exe C:/Users/TomEccles/PycharmProjects/2048python/game_player.py
+Console output is saving to: C:\Users\TomEccles\PycharmProjects\2048python\output\output.txt
+2017-07-18 21:54:14.471576: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE instructions, but these are available on your machine and could speed up CPU computations.
+2017-07-18 21:54:14.472055: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-07-18 21:54:14.472726: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE3 instructions, but these are available on your machine and could speed up CPU computations.
+2017-07-18 21:54:14.473112: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-07-18 21:54:14.473705: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-07-18 21:54:14.474133: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-07-18 21:54:14.474698: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-07-18 21:54:14.475111: W c:\tf_jenkins\home\workspace\release-win\device\cpu\os\windows\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+WARNING:tensorflow:From C:\Users\TomEccles\PycharmProjects\2048python\predict_moves.py:82: initialize_all_variables (from tensorflow.python.ops.variables) is deprecated and will be removed after 2017-03-02.
+Instructions for updating:
+Use `tf.global_variables_initializer` instead.
+Initialized prior net
+WARNING:tensorflow:From C:\Users\TomEccles\PycharmProjects\2048python\predict_values.py:67: initialize_all_variables (from tensorflow.python.ops.variables) is deprecated and will be removed after 2017-03-02.
+Instructions for updating:
+Use `tf.global_variables_initializer` instead.
+Initialized valuer
+         84448921 function calls (83086941 primitive calls) in 277.234 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000  277.286  277.286 <string>:1(<module>)
+        2    0.000    0.000    0.000    0.000 __init__.py:118(getLevelName)
+        2    0.000    0.000    0.000    0.000 __init__.py:1269(info)
+        2    0.000    0.000    0.000    0.000 __init__.py:1281(warning)
+        2    0.000    0.000    0.000    0.000 __init__.py:1347(findCaller)
+        2    0.000    0.000    0.000    0.000 __init__.py:1377(makeRecord)
+        2    0.000    0.000    0.000    0.000 __init__.py:1392(_log)
+        2    0.000    0.000    0.000    0.000 __init__.py:1417(handle)
+        2    0.000    0.000    0.000    0.000 __init__.py:1471(callHandlers)
+        2    0.000    0.000    0.000    0.000 __init__.py:149(<lambda>)
+        4    0.000    0.000    0.000    0.000 __init__.py:1501(getEffectiveLevel)
+        4    0.000    0.000    0.000    0.000 __init__.py:1515(isEnabledFor)
+        2    0.000    0.000    0.000    0.000 __init__.py:243(__init__)
+        2    0.000    0.000    0.000    0.000 __init__.py:321(getMessage)
+        2    0.000    0.000    0.000    0.000 __init__.py:379(usesTime)
+        2    0.000    0.000    0.000    0.000 __init__.py:382(format)
+        2    0.000    0.000    0.000    0.000 __init__.py:532(usesTime)
+        2    0.000    0.000    0.000    0.000 __init__.py:538(formatMessage)
+        2    0.000    0.000    0.000    0.000 __init__.py:554(format)
+        4    0.000    0.000    0.000    0.000 __init__.py:695(filter)
+        4    0.000    0.000    0.000    0.000 __init__.py:799(acquire)
+        4    0.000    0.000    0.000    0.000 __init__.py:806(release)
+        2    0.000    0.000    0.000    0.000 __init__.py:819(format)
+        2    0.000    0.000    0.000    0.000 __init__.py:842(handle)
+        2    0.000    0.000    0.000    0.000 __init__.py:957(flush)
+        2    0.000    0.000    0.000    0.000 __init__.py:968(emit)
+        1    0.000    0.000    0.000    0.000 _bootlocale.py:11(getpreferredencoding)
+        7    0.000    0.000    0.000    0.000 _collections_abc.py:308(__subclasshook__)
+    98344    0.094    0.000    0.710    0.000 _methods.py:31(_sum)
+       62    0.000    0.000    0.001    0.000 _methods.py:34(_prod)
+   865290    0.701    0.000    6.620    0.000 _methods.py:40(_all)
+        7    0.000    0.000    0.000    0.000 _weakrefset.py:16(__init__)
+        7    0.000    0.000    0.000    0.000 _weakrefset.py:20(__enter__)
+        7    0.000    0.000    0.000    0.000 _weakrefset.py:26(__exit__)
+        3    0.000    0.000    0.000    0.000 _weakrefset.py:36(__init__)
+        7    0.000    0.000    0.000    0.000 _weakrefset.py:52(_commit_removals)
+       18    0.000    0.000    0.000    0.000 _weakrefset.py:58(__iter__)
+   629348    0.888    0.000    0.888    0.000 _weakrefset.py:70(__contains__)
+        7    0.000    0.000    0.000    0.000 _weakrefset.py:81(add)
+   314991    1.071    0.000    1.959    0.000 abc.py:178(__instancecheck__)
+      7/2    0.000    0.000    0.000    0.000 abc.py:194(__subclasscheck__)
+       60    0.000    0.000    0.000    0.000 array_ops.py:873(_get_dtype_from_nested_lists)
+       60    0.000    0.000    0.000    0.000 array_ops.py:894(_autopacking_conversion_function)
+   712862    2.077    0.000   27.586    0.000 board.py:104(__move_in_place)
+   707672    0.833    0.000    4.692    0.000 board.py:109(<lambda>)
+    11812    0.090    0.000    0.151    0.000 board.py:11(squish_uncached)
+   711672    0.971    0.000    4.912    0.000 board.py:113(<lambda>)
+  2851448   17.091    0.000   17.270    0.000 board.py:120(squish_cached)
+    11812    0.028    0.000    0.179    0.000 board.py:40(__missing__)
+  1250638    2.122    0.000    9.030    0.000 board.py:61(__init__)
+   865290    1.239    0.000   17.790    0.000 board.py:64(__eq__)
+   336269    0.499    0.000    0.870    0.000 board.py:67(__hash__)
+   712862    1.006    0.000   25.509    0.000 board.py:7(apply_to_rows_returning_or)
+  1250637    1.994    0.000   11.024    0.000 board.py:70(copy)
+   247231    1.428    0.000    2.485    0.000 board.py:77(can_add_random)
+  2851448    1.864    0.000   20.937    0.000 board.py:8(<lambda>)
+   345575    3.813    0.000   11.017    0.000 board.py:81(add_random)
+   712862    1.331    0.000   35.020    0.000 board.py:99(move)
+   137563    0.429    0.000    3.315    0.000 board_features.py:10(non_zero)
+   137563    1.913    0.000    1.913    0.000 board_features.py:11(<listcomp>)
+   550252    1.917    0.000   38.758    0.000 board_features.py:14(can_move)
+   137563    0.376    0.000   40.354    0.000 board_features.py:18(possible_moves)
+   137563    0.575    0.000   39.332    0.000 board_features.py:19(<listcomp>)
+    39219    0.664    0.000   22.580    0.001 board_features.py:22(board_as_feature_array)
+    98344    2.253    0.000   60.258    0.001 board_features.py:28(board_as_feature_array_with_sum)
+   137563    0.885    0.000   31.079    0.000 board_features.py:6(compare)
+   137563   25.918    0.000   25.918    0.000 board_features.py:7(<listcomp>)
+        1    0.000    0.000    0.000    0.000 codecs.py:185(__init__)
+        1    0.000    0.000    0.000    0.000 codecs.py:213(setstate)
+      126    0.001    0.000    0.092    0.001 common_shapes.py:557(call_cpp_shape_fn)
+       64    0.002    0.000    0.085    0.001 common_shapes.py:633(_call_cpp_shape_fn_impl)
+      176    0.002    0.000    0.046    0.000 common_shapes.py:641(tensor_to_inference_result)
+       64    0.001    0.000    0.046    0.001 common_shapes.py:649(<listcomp>)
+       64    0.000    0.000    0.000    0.000 common_shapes.py:651(<listcomp>)
+       64    0.000    0.000    0.000    0.000 common_shapes.py:659(<listcomp>)
+       64    0.000    0.000    0.007    0.000 common_shapes.py:688(<listcomp>)
+       64    0.000    0.000    0.000    0.000 common_shapes.py:691(<listcomp>)
+       64    0.000    0.000    0.000    0.000 common_shapes.py:692(<listcomp>)
+       64    0.000    0.000    0.000    0.000 common_shapes.py:693(<listcomp>)
+   452312    0.754    0.000    1.300    0.000 compat.py:46(as_bytes)
+      256    0.000    0.000    0.000    0.000 compat.py:68(as_text)
+       60    0.000    0.000    0.094    0.002 constant_op.py:110(_constant_tensor_conversion_function)
+       62    0.002    0.000    0.096    0.002 constant_op.py:54(constant)
+     4228    0.003    0.000    0.003    0.000 containers.py:192(__init__)
+    12730    0.006    0.000    0.006    0.000 containers.py:202(__getitem__)
+     7150    0.004    0.000    0.006    0.000 containers.py:206(__len__)
+     2738    0.004    0.000    0.006    0.000 containers.py:237(__init__)
+      254    0.001    0.000    0.003    0.000 containers.py:261(extend)
+      254    0.001    0.000    0.001    0.000 containers.py:275(<listcomp>)
+     2490    0.004    0.000    0.006    0.000 containers.py:280(MergeFrom)
+      126    0.000    0.000    0.000    0.000 containers.py:320(__delitem__)
+     1490    0.003    0.000    0.004    0.000 containers.py:350(__init__)
+      228    0.001    0.000    0.003    0.000 containers.py:368(add)
+1864/1667    0.009    0.000    0.096    0.000 containers.py:379(extend)
+     1246    0.001    0.000    0.020    0.000 containers.py:393(MergeFrom)
+      840    0.002    0.000    0.002    0.000 containers.py:532(__init__)
+     7958    0.013    0.000    0.029    0.000 containers.py:551(__getitem__)
+     1706    0.001    0.000    0.001    0.000 containers.py:586(__contains__)
+     1970    0.001    0.000    0.002    0.000 containers.py:596(__len__)
+     2688    0.002    0.000    0.003    0.000 containers.py:599(__iter__)
+      718    0.006    0.000    0.071    0.000 containers.py:605(MergeFrom)
+   275642    0.564    0.000    2.013    0.000 contextlib.py:131(helper)
+   275642    1.287    0.000    1.449    0.000 contextlib.py:37(__init__)
+275642/275442    0.302    0.000    1.404    0.000 contextlib.py:57(__enter__)
+275642/275442    1.247    0.000    3.123    0.000 contextlib.py:63(__exit__)
+        2    0.000    0.000    0.004    0.002 control_flow_ops.py:132(_Identity)
+        2    0.000    0.000    0.004    0.002 control_flow_ops.py:2666(with_dependencies)
+        4    0.000    0.000    0.005    0.001 control_flow_ops.py:2702(_GroupControlDeps)
+        4    0.000    0.000    0.006    0.001 control_flow_ops.py:2712(group)
+      126    0.001    0.000    0.018    0.000 copy.py:137(deepcopy)
+      126    0.000    0.000    0.000    0.000 copy.py:254(_keep_alive)
+        4    0.000    0.000    0.000    0.000 copy.py:270(_reconstruct)
+        4    0.000    0.000    0.000    0.000 copy.py:67(copy)
+        4    0.000    0.000    0.000    0.000 copyreg.py:87(__newobj__)
+        1    0.000    0.000    0.000    0.000 cp1252.py:18(encode)
+      238    0.001    0.000    0.001    0.000 decoder.py:117(DecodeVarint)
+       36    0.000    0.000    0.000    0.000 decoder.py:137(DecodeVarint)
+      262    0.000    0.000    0.001    0.000 decoder.py:169(ReadTag)
+      122    0.000    0.000    0.001    0.000 decoder.py:238(DecodeField)
+       86    0.000    0.000    0.000    0.000 decoder.py:257(InnerDecode)
+       24    0.000    0.000    0.001    0.000 decoder.py:601(DecodeRepeatedField)
+      116    0.001    0.000    0.005    0.000 decoder.py:623(DecodeField)
+        2    0.000    0.000    0.000    0.000 decorator_utils.py:24(get_qualified_name)
+        2    0.000    0.000    0.004    0.002 deprecation.py:110(new_func)
+        2    0.000    0.000    0.000    0.000 deprecation.py:60(_call_location)
+      656    0.000    0.000    0.000    0.000 descriptor.py:118(GetOptions)
+        8    0.000    0.000    0.000    0.000 device.py:106(replica)
+        8    0.000    0.000    0.000    0.000 device.py:110(replica)
+        8    0.000    0.000    0.000    0.000 device.py:117(task)
+        8    0.000    0.000    0.000    0.000 device.py:121(task)
+        8    0.000    0.000    0.000    0.000 device.py:128(parse_from_string)
+        8    0.000    0.000    0.000    0.000 device.py:146(<listcomp>)
+        4    0.000    0.000    0.000    0.000 device.py:175(merge_from)
+        4    0.000    0.000    0.000    0.000 device.py:192(to_string)
+        8    0.000    0.000    0.000    0.000 device.py:213(from_string)
+        4    0.000    0.000    0.000    0.000 device.py:255(merge_device)
+        4    0.000    0.000    0.000    0.000 device.py:283(_device_function)
+        8    0.000    0.000    0.000    0.000 device.py:65(__init__)
+        8    0.000    0.000    0.000    0.000 device.py:88(_clear)
+        8    0.000    0.000    0.000    0.000 device.py:95(job)
+        8    0.000    0.000    0.000    0.000 device.py:99(job)
+       60    0.000    0.000    0.000    0.000 dtypes.py:114(is_numpy_compatible)
+   314407    0.329    0.000    0.329    0.000 dtypes.py:119(as_numpy_dtype)
+     1392    0.000    0.000    0.000    0.000 dtypes.py:124(as_datatype_enum)
+      352    0.001    0.000    0.002    0.000 dtypes.py:231(is_compatible_with)
+      550    0.001    0.000    0.001    0.000 dtypes.py:254(__eq__)
+      178    0.000    0.000    0.001    0.000 dtypes.py:264(__ne__)
+      122    0.000    0.000    0.000    0.000 dtypes.py:279(__hash__)
+     1366    0.002    0.000    0.002    0.000 dtypes.py:537(as_dtype)
+      880    0.000    0.000    0.000    0.000 dtypes.py:82(_is_ref_dtype)
+       28    0.000    0.000    0.000    0.000 dtypes.py:87(_as_ref)
+      794    0.001    0.000    0.001    0.000 dtypes.py:95(base_dtype)
+      261    0.002    0.000    0.002    0.000 encoder.py:134(PackedFieldSize)
+     3452    0.002    0.000    0.004    0.000 encoder.py:148(FieldSize)
+      138    0.000    0.000    0.000    0.000 encoder.py:192(PackedFieldSize)
+      868    0.000    0.000    0.000    0.000 encoder.py:203(FieldSize)
+      842    0.005    0.000    0.009    0.000 encoder.py:238(RepeatedFieldSize)
+     7142    0.012    0.000    0.019    0.000 encoder.py:246(FieldSize)
+      773    0.003    0.000    0.005    0.000 encoder.py:260(RepeatedFieldSize)
+      186    0.000    0.000    0.000    0.000 encoder.py:268(FieldSize)
+      591    0.003    0.000    0.012    0.000 encoder.py:299(RepeatedFieldSize)
+9242/4418    0.012    0.000    0.145    0.000 encoder.py:307(FieldSize)
+     1314    0.022    0.000    0.305    0.000 encoder.py:351(FieldSize)
+     9326    0.013    0.000    0.018    0.000 encoder.py:372(EncodeVarint)
+     1339    0.002    0.000    0.002    0.000 encoder.py:388(EncodeSignedVarint)
+       97    0.001    0.000    0.001    0.000 encoder.py:440(EncodePackedField)
+     1190    0.001    0.000    0.004    0.000 encoder.py:458(EncodeField)
+       46    0.000    0.000    0.001    0.000 encoder.py:581(EncodePackedField)
+      508    0.000    0.000    0.001    0.000 encoder.py:671(EncodeField)
+      485    0.003    0.000    0.007    0.000 encoder.py:687(EncodeRepeatedField)
+     2834    0.006    0.000    0.015    0.000 encoder.py:695(EncodeField)
+      237    0.001    0.000    0.002    0.000 encoder.py:711(EncodeRepeatedField)
+       62    0.000    0.000    0.000    0.000 encoder.py:718(EncodeField)
+  253/112    0.004    0.000    0.402    0.004 encoder.py:753(EncodeRepeatedField)
+3890/1826    0.009    0.000    0.136    0.000 encoder.py:760(EncodeField)
+      656    0.011    0.000    0.218    0.000 encoder.py:818(EncodeField)
+    20551    0.005    0.000    0.005    0.000 encoder.py:82(_VarintSize)
+     3992    0.002    0.000    0.002    0.000 encoder.py:96(_SignedVarintSize)
+   275274    0.695    0.000    1.426    0.000 errors_impl.py:457(raise_exception_on_not_ok_status)
+        1    0.000    0.000    0.000    0.000 file_utils.py:4(create_dir_if_needed)
+        1    0.000    0.000    0.001    0.001 file_utils.py:8(open_creating_dir_if_needed)
+   137563    0.402    0.000    1.709    0.000 fromnumeric.py:138(reshape)
+    98344    0.706    0.000    1.511    0.000 fromnumeric.py:1710(sum)
+       62    0.001    0.000    0.002    0.000 fromnumeric.py:2388(prod)
+   137563    0.295    0.000    1.307    0.000 fromnumeric.py:55(_wrapfunc)
+  1388200    1.989    0.000    7.495    0.000 function_base.py:1453(copy)
+        1    0.003    0.003  277.286  277.286 game_player.py:110(run_one_game)
+        1    0.034    0.034  276.221  276.221 game_player.py:12(play_game)
+        1    0.005    0.005  276.227  276.227 game_player.py:38(get_data)
+        2    0.000    0.000    0.004    0.002 gen_array_ops.py:1328(identity)
+        4    0.000    0.000    0.004    0.001 gen_control_flow_ops.py:180(no_op)
+       28    0.000    0.000    0.163    0.006 gen_io_ops.py:631(restore_v2)
+        2    0.000    0.000    0.023    0.012 gen_io_ops.py:755(save_v2)
+       28    0.000    0.000    0.076    0.003 gen_state_ops.py:21(assign)
+        2    0.000    0.000    0.000    0.000 genericpath.py:111(_splitext)
+        1    0.000    0.000    0.000    0.000 genericpath.py:16(exists)
+        2    0.000    0.000    0.000    0.000 inspect.py:1457(currentframe)
+     2310    0.004    0.000    0.063    0.000 message.py:106(CopyFrom)
+      126    0.000    0.000    0.016    0.000 message.py:69(__deepcopy__)
+      668    0.000    0.000    0.000    0.000 message_listener.py:77(Modified)
+     1922    0.266    0.000  275.736    0.143 move_player.py:11(play)
+     1922    0.005    0.000    0.015    0.000 move_player.py:5(__init__)
+   192200    0.346    0.000  275.449    0.001 move_player.py:8(evaluate)
+   137565    1.443    0.000    5.134    0.000 nest.py:144(flatten_dict_items)
+   314347    0.352    0.000    2.819    0.000 nest.py:74(is_sequence)
+        1    0.000    0.000    1.055    1.055 nets.py:22(__init__)
+  1216309    0.339    0.000    0.339    0.000 nets.py:33(get_prior_weight)
+    39219    0.233    0.000   61.388    0.002 nets.py:39(get_priors)
+    98344    0.561    0.000  146.480    0.001 nets.py:44(get_value)
+781162/192200    2.295    0.000  275.103    0.001 node.py:13(evaluate)
+781162/192200    1.910    0.000    1.910    0.000 node.py:24(registerScore)
+   229591    0.419    0.000    0.419    0.000 node.py:5(__init__)
+        4    0.000    0.000    0.000    0.000 ntpath.py:120(splitdrive)
+        4    0.000    0.000    0.000    0.000 ntpath.py:197(split)
+        2    0.000    0.000    0.000    0.000 ntpath.py:220(splitext)
+        2    0.000    0.000    0.000    0.000 ntpath.py:230(basename)
+        1    0.000    0.000    0.000    0.000 ntpath.py:237(dirname)
+        4    0.000    0.000    0.000    0.000 ntpath.py:35(_get_bothseps)
+        2    0.000    0.000    0.000    0.000 ntpath.py:45(normcase)
+   865290    5.731    0.000   16.551    0.000 numeric.py:2590(array_equal)
+  2910217    3.227    0.000    5.733    0.000 numeric.py:463(asarray)
+       28    0.000    0.000    0.000    0.000 op_def_library.py:166(_MakeBool)
+       86    0.000    0.000    0.001    0.000 op_def_library.py:173(_MakeType)
+  184/128    0.000    0.000    0.001    0.000 op_def_library.py:244(_MaybeColocateWith)
+       64    0.009    0.000    0.269    0.004 op_def_library.py:289(apply_op)
+       58    0.000    0.000    0.000    0.000 op_def_library.py:38(_Attr)
+       58    0.000    0.000    0.000    0.000 op_def_library.py:46(_AttrValue)
+        2    0.000    0.000    0.000    0.000 op_def_library.py:468(<listcomp>)
+      144    0.000    0.000    0.001    0.000 op_def_library.py:53(_SatisfiesTypeConstraint)
+      150    0.000    0.000    0.000    0.000 op_def_library.py:531(<listcomp>)
+       56    0.000    0.000    0.000    0.000 op_def_library.py:619(<genexpr>)
+      150    0.000    0.000    0.000    0.000 op_def_library.py:64(_IsListParameter)
+       30    0.000    0.000    0.001    0.000 op_def_library.py:704(<listcomp>)
+       28    0.000    0.000    0.000    0.000 op_def_library.py:753(<listcomp>)
+       64    0.000    0.000    0.000    0.000 op_def_library.py:762(<listcomp>)
+      266    0.000    0.000    0.000    0.000 op_def_library.py:80(_IsListValue)
+       64    0.000    0.000    0.001    0.000 op_def_library.py:84(_Flatten)
+       64    0.000    0.000    0.000    0.000 op_def_library.py:87(<listcomp>)
+       64    0.000    0.000    0.000    0.000 op_def_library.py:89(<listcomp>)
+       58    0.000    0.000    0.000    0.000 op_def_library.py:92(_Restructure)
+        4    0.000    0.000    0.000    0.000 ops.py:1075(_device_string)
+      126    0.002    0.000    0.019    0.000 ops.py:1082(_NodeDef)
+      126    0.003    0.000    0.070    0.001 ops.py:1137(__init__)
+      126    0.000    0.000    0.003    0.000 ops.py:1202(<listcomp>)
+       62    0.000    0.000    0.000    0.000 ops.py:1205(<listcomp>)
+      240    0.000    0.000    0.001    0.000 ops.py:1207(<genexpr>)
+       30    0.000    0.000    0.001    0.000 ops.py:1241(colocation_groups)
+       20    0.000    0.000    0.000    0.000 ops.py:1250(<listcomp>)
+   452168    0.407    0.000    1.361    0.000 ops.py:127(_as_graph_element)
+  1218871    1.207    0.000    2.650    0.000 ops.py:1278(name)
+      378    0.000    0.000    0.000    0.000 ops.py:1283(_id)
+      118    0.000    0.000    0.000    0.000 ops.py:1288(device)
+        4    0.000    0.000    0.000    0.000 ops.py:1299(_set_device)
+      126    0.001    0.000    0.005    0.000 ops.py:1401(_recompute_node_def)
+      126    0.000    0.000    0.001    0.000 ops.py:1403(<listcomp>)
+        6    0.000    0.000    0.000    0.000 ops.py:1405(<listcomp>)
+     1118    0.000    0.000    0.000    0.000 ops.py:1414(outputs)
+       64    0.000    0.000    0.000    0.000 ops.py:1423(__init__)
+       64    0.000    0.000    0.000    0.000 ops.py:1426(__iter__)
+       64    0.000    0.000    0.000    0.000 ops.py:1442(inputs)
+      112    0.000    0.000    0.000    0.000 ops.py:146(is_dense_tensor_like)
+   275616    0.249    0.000    0.494    0.000 ops.py:1467(type)
+   452374    0.236    0.000    0.236    0.000 ops.py:1472(graph)
+     1330    0.001    0.000    0.001    0.000 ops.py:1477(node_def)
+       82    0.001    0.000    0.003    0.000 ops.py:1504(get_attr)
+        2    0.000    0.000    0.527    0.263 ops.py:1535(run)
+      126    0.000    0.000    0.092    0.001 ops.py:1668(call_with_requiring)
+      126    0.002    0.000    0.098    0.001 ops.py:1709(set_shapes_for_outputs)
+       70    0.000    0.000    0.000    0.000 ops.py:1879(_name_from_scope_name)
+      378    0.000    0.000    0.000    0.000 ops.py:2004(_check_not_finalized)
+      126    0.001    0.000    0.002    0.000 ops.py:2013(_add_op)
+   275134    0.742    0.000    0.742    0.000 ops.py:2039(version)
+       64    0.000    0.000    0.000    0.000 ops.py:2052(graph_def_versions)
+      126    0.000    0.000    0.000    0.000 ops.py:2098(_get_control_flow_context)
+        4    0.004    0.001    0.241    0.060 ops.py:2114(_as_graph_def)
+      136    0.000    0.000    0.000    0.000 ops.py:2241(building_function)
+      126    0.004    0.000    0.201    0.002 ops.py:2247(create_op)
+   451972    1.193    0.000    5.215    0.000 ops.py:2381(as_graph_element)
+   451972    1.605    0.000    4.022    0.000 ops.py:2416(_as_graph_element_locked)
+      126    0.001    0.000    0.001    0.000 ops.py:2565(_next_id)
+   137707    0.517    0.000    1.519    0.000 ops.py:2576(as_default)
+        6    0.000    0.000    0.000    0.000 ops.py:2675(get_collection)
+      120    0.001    0.000    0.002    0.000 ops.py:273(__init__)
+      144    0.000    0.000    0.001    0.000 ops.py:2754(name_scope)
+      128    0.001    0.000    0.001    0.000 ops.py:2865(unique_name)
+       60    0.000    0.000    0.000    0.000 ops.py:2910(colocate_with)
+       64    0.000    0.000    0.000    0.000 ops.py:2985(device)
+   727410    0.186    0.000    0.186    0.000 ops.py:299(op)
+   314933    0.146    0.000    0.146    0.000 ops.py:304(dtype)
+      126    0.000    0.000    0.001    0.000 ops.py:3055(_apply_device_functions)
+   452218    0.547    0.000    0.783    0.000 ops.py:309(graph)
+       34    0.000    0.000    0.000    0.000 ops.py:3123(__init__)
+   451914    1.885    0.000    4.008    0.000 ops.py:314(name)
+       34    0.000    0.000    0.000    0.000 ops.py:3157(__enter__)
+       34    0.000    0.000    0.000    0.000 ops.py:3167(__exit__)
+       62    0.000    0.000    0.000    0.000 ops.py:3174(control_inputs)
+      118    0.000    0.000    0.000    0.000 ops.py:3178(add_op)
+       93    0.000    0.000    0.000    0.000 ops.py:3181(op_in_group)
+       34    0.000    0.000    0.000    0.000 ops.py:3184(_push_control_dependencies_controller)
+       34    0.000    0.000    0.000    0.000 ops.py:3187(_pop_control_dependencies_controller)
+       34    0.000    0.000    0.000    0.000 ops.py:3191(_current_control_dependencies)
+      126    0.001    0.000    0.001    0.000 ops.py:3198(_control_dependencies_for_inputs)
+       56    0.000    0.000    0.000    0.000 ops.py:321(device)
+      126    0.000    0.000    0.000    0.000 ops.py:3216(<listcomp>)
+       62    0.000    0.000    0.000    0.000 ops.py:3230(<listcomp>)
+      126    0.000    0.000    0.000    0.000 ops.py:3233(_record_op_seen_by_control_dependencies)
+       34    0.000    0.000    0.001    0.000 ops.py:3242(control_dependencies)
+   314551    0.140    0.000    0.140    0.000 ops.py:326(shape)
+   314347    0.564    0.000    0.795    0.000 ops.py:3528(is_feedable)
+   137567    0.181    0.000    0.225    0.000 ops.py:3536(is_fetchable)
+       32    0.000    0.000    0.000    0.000 ops.py:3544(device)
+       30    0.000    0.000    0.000    0.000 ops.py:3575(colocate_with)
+       34    0.000    0.000    0.001    0.000 ops.py:3579(control_dependencies)
+   137935    0.259    0.000    0.289    0.000 ops.py:3606(get_default)
+   275414    0.674    0.000    0.953    0.000 ops.py:3620(get_controller)
+        2    0.000    0.000    0.526    0.263 ops.py:3744(_run_using_default_session)
+   314551    0.324    0.000    0.464    0.000 ops.py:378(get_shape)
+   137935    0.575    0.000    0.864    0.000 ops.py:3786(get_default)
+      120    0.000    0.000    0.001    0.000 ops.py:382(set_shape)
+   137935    0.277    0.000    1.141    0.000 ops.py:3821(get_default_graph)
+      136    0.000    0.000    0.000    0.000 ops.py:3839(_assert_same_graph)
+      136    0.001    0.000    0.003    0.000 ops.py:3854(_get_graph_from_inputs)
+        6    0.000    0.000    0.000    0.000 ops.py:4093(get_collection)
+      144    0.001    0.000    0.005    0.000 ops.py:4123(name_scope)
+      176    0.000    0.000    0.000    0.000 ops.py:428(_add_consumer)
+      176    0.000    0.000    0.001    0.000 ops.py:441(_as_node_def_input)
+  1532564    0.768    0.000    1.056    0.000 ops.py:472(__hash__)
+      202    0.000    0.000    0.001    0.000 ops.py:572(_TensorTensorConversionFunction)
+      290    0.002    0.000    0.100    0.000 ops.py:642(internal_convert_to_tensor)
+       60    0.000    0.000    0.002    0.000 ops.py:725(internal_convert_n_to_tensor)
+       58    0.000    0.000    0.002    0.000 ops.py:769(convert_n_to_tensor)
+        2    0.000    0.000    0.000    0.000 ops.py:803(convert_to_tensor_or_indexed_slices)
+       34    0.000    0.000    0.000    0.000 ops.py:827(internal_convert_to_tensor_or_indexed_slices)
+      126    0.005    0.000    0.006    0.000 ops.py:96(_extract_stack)
+        1    0.000    0.000    0.000    0.000 os.py:216(makedirs)
+    39219    0.652    0.000   38.575    0.001 predict_moves.py:112(run_forward)
+        1    0.000    0.000    0.251    0.251 predict_moves.py:118(load)
+        1    0.000    0.000    0.283    0.283 predict_moves.py:79(__init__)
+        1    0.000    0.000    0.253    0.253 predict_values.py:64(__init__)
+    98344    1.328    0.000   85.661    0.001 predict_values.py:89(run_forward)
+        1    0.000    0.000    0.268    0.268 predict_values.py:93(load)
+15588/5671    0.051    0.000    0.414    0.000 python_message.py:1006(ByteSize)
+      308    0.001    0.000    0.446    0.001 python_message.py:1028(SerializeToString)
+      308    0.001    0.000    0.436    0.001 python_message.py:1042(SerializePartialToString)
+ 5109/308    0.017    0.000    0.435    0.001 python_message.py:1048(InternalSerialize)
+       58    0.000    0.000    0.006    0.000 python_message.py:1059(MergeFromString)
+   210/58    0.001    0.000    0.005    0.000 python_message.py:1079(InternalParse)
+ 1414/308    0.007    0.000    0.009    0.000 python_message.py:1112(IsInitialized)
+11672/6162    0.060    0.000    0.216    0.000 python_message.py:1204(MergeFrom)
+       82    0.000    0.000    0.001    0.000 python_message.py:1245(WhichOneof)
+     2310    0.004    0.000    0.008    0.000 python_message.py:1268(_Clear)
+    11702    0.006    0.000    0.006    0.000 python_message.py:1287(_SetListener)
+21608/14690    0.020    0.000    0.037    0.000 python_message.py:1323(Modified)
+     6552    0.006    0.000    0.008    0.000 python_message.py:1338(_UpdateOneofState)
+    19774    0.034    0.000    0.046    0.000 python_message.py:1368(__init__)
+    18424    0.010    0.000    0.014    0.000 python_message.py:1387(Modified)
+     2066    0.004    0.000    0.008    0.000 python_message.py:1403(__init__)
+     2066    0.006    0.000    0.011    0.000 python_message.py:1412(Modified)
+      210    0.000    0.000    0.000    0.000 python_message.py:262(_IsMapField)
+      840    0.002    0.000    0.004    0.000 python_message.py:370(MakeMessageMapDefault)
+     1490    0.003    0.000    0.007    0.000 python_message.py:408(MakeRepeatedMessageDefault)
+     2738    0.005    0.000    0.011    0.000 python_message.py:414(MakeRepeatedScalarDefault)
+     7916    0.027    0.000    0.091    0.000 python_message.py:422(MakeSubMessageDefault)
+      126    0.000    0.000    0.000    0.000 python_message.py:452(_GetIntegerEnumValue)
+17708/10527    0.106    0.000    0.304    0.000 python_message.py:467(init)
+     9652    0.005    0.000    0.005    0.000 python_message.py:533(_GetFieldByName)
+     2034    0.002    0.000    0.005    0.000 python_message.py:602(getter)
+  1500169    1.221    0.000    1.693    0.000 python_message.py:647(getter)
+     5392    0.009    0.000    0.025    0.000 python_message.py:656(field_setter)
+      120    0.000    0.000    0.001    0.000 python_message.py:671(setter)
+      940    0.001    0.000    0.007    0.000 python_message.py:701(getter)
+       58    0.000    0.000    0.006    0.000 python_message.py:753(FromString)
+    31590    0.035    0.000    0.040    0.000 python_message.py:760(_IsPresent)
+    18214    0.047    0.000    0.157    0.000 python_message.py:775(ListFields)
+    18214    0.027    0.000    0.067    0.000 python_message.py:776(<listcomp>)
+    30649    0.009    0.000    0.009    0.000 python_message.py:777(<lambda>)
+      888    0.002    0.000    0.002    0.000 python_message.py:806(HasField)
+   137567    0.229    0.000    1.096    0.000 pywrap_tensorflow_internal.py:325(<lambda>)
+   137567    0.057    0.000    0.057    0.000 pywrap_tensorflow_internal.py:337(<lambda>)
+        2    0.000    0.000    0.000    0.000 pywrap_tensorflow_internal.py:398(TF_NewSessionOptions)
+   137567    0.653    0.000    0.653    0.000 pywrap_tensorflow_internal.py:54(_swig_setattr_nondynamic)
+   137567    0.215    0.000    0.867    0.000 pywrap_tensorflow_internal.py:73(_swig_setattr)
+   345575    1.039    0.000    2.401    0.000 random.py:170(randrange)
+   345575    0.487    0.000    2.888    0.000 random.py:214(randint)
+   345575    1.009    0.000    1.362    0.000 random.py:220(_randbelow)
+      252    0.001    0.000    0.001    0.000 registry.py:78(lookup)
+   192200    0.191    0.000   10.731    0.000 rollout.py:13(rolloutFromMove)
+    98344    0.302    0.000    9.431    0.000 rollout.py:17(rollout_from_appear)
+   192200    0.537    0.000   10.539    0.000 rollout.py:8(rolloutFromMoveC)
+       28    0.000    0.000    0.000    0.000 saver.py:106(__init__)
+        2    0.000    0.000    0.276    0.138 saver.py:1061(build)
+        4    0.000    0.000    0.000    0.000 saver.py:1104(_check_saver_def)
+       28    0.000    0.000    0.000    0.000 saver.py:143(__init__)
+        2    0.000    0.000    0.243    0.121 saver.py:1438(restore)
+       28    0.000    0.000    0.077    0.003 saver.py:147(restore)
+        2    0.000    0.000    0.000    0.000 saver.py:180(__init__)
+        2    0.000    0.000    0.023    0.012 saver.py:183(save_op)
+       28    0.000    0.000    0.163    0.006 saver.py:224(restore_op)
+        2    0.000    0.000    0.028    0.014 saver.py:266(_AddSaveOps)
+        2    0.000    0.000    0.244    0.122 saver.py:376(_AddRestoreOps)
+       56    0.000    0.000    0.000    0.000 saver.py:453(_IsVariable)
+        2    0.000    0.000    0.001    0.000 saver.py:484(OpListToDict)
+        2    0.000    0.000    0.001    0.001 saver.py:540(_ValidateAndSliceInputs)
+       28    0.000    0.000    0.000    0.000 saver.py:611(_AddSaveable)
+        2    0.000    0.000    0.276    0.138 saver.py:629(build)
+        2    0.000    0.000    0.000    0.000 saver.py:678(<listcomp>)
+       28    0.000    0.000    0.000    0.000 saver.py:91(__init__)
+        2    0.000    0.000    0.276    0.138 saver.py:946(__init__)
+   137567    1.719    0.000   57.947    0.000 session.py:1014(_run_fn)
+   137567    0.282    0.000   58.229    0.000 session.py:1037(_do_call)
+   137567    0.444    0.000    1.325    0.000 session.py:1054(_extend_graph)
+   137567    0.860    0.000    2.561    0.000 session.py:1094(_update_with_movers)
+        2    0.000    0.000    0.006    0.003 session.py:1172(__init__)
+   137567    0.165    0.000    0.165    0.000 session.py:120(<lambda>)
+   314347    0.223    0.000    0.223    0.000 session.py:121(<lambda>)
+275130/137567    1.165    0.000    7.218    0.000 session.py:211(for_fetch)
+   137567    0.814    0.000    3.454    0.000 session.py:247(__init__)
+   137567    0.063    0.000    0.063    0.000 session.py:280(unique_fetches)
+   137567    0.230    0.000    0.282    0.000 session.py:283(build_results)
+   137563    0.789    0.000    1.319    0.000 session.py:291(_uniquify_fetches)
+   137563    0.665    0.000    6.768    0.000 session.py:330(__init__)
+   137563    0.257    0.000    4.784    0.000 session.py:337(<listcomp>)
+   137563    0.055    0.000    0.055    0.000 session.py:340(unique_fetches)
+   137563    1.061    0.000    1.515    0.000 session.py:343(build_results)
+   137563    0.131    0.000    0.131    0.000 session.py:347(<listcomp>)
+   137567    3.201    0.000   16.459    0.000 session.py:397(__init__)
+   137567    0.161    0.000    0.161    0.000 session.py:429(<listcomp>)
+   137567    0.189    0.000    0.414    0.000 session.py:431(_assert_fetchable)
+   137567    0.054    0.000    0.054    0.000 session.py:436(fetches)
+   137567    0.053    0.000    0.053    0.000 session.py:444(targets)
+   137567    1.397    0.000    3.217    0.000 session.py:452(build_results)
+        2    0.000    0.000    0.006    0.003 session.py:503(__init__)
+  1080610    0.370    0.000    0.370    0.000 session.py:594(graph)
+   137567    1.448    0.000  122.671    0.001 session.py:667(run)
+   137567   10.309    0.000  118.876    0.001 session.py:903(_run)
+   314347    0.929    0.000    1.391    0.000 session.py:905(_feed_fn)
+   137567    0.472    0.000   58.701    0.000 session.py:990(_do_run)
+   314347    0.573    0.000    1.267    0.000 session_ops.py:264(_get_handle_feeder)
+   314347    0.327    0.000    1.594    0.000 session_ops.py:284(_get_handle_mover)
+   137691    0.303    0.000    0.467    0.000 six.py:580(iteritems)
+       28    0.000    0.000    0.076    0.003 state_ops.py:243(assign)
+   353720    0.858    0.000    0.975    0.000 tensor_shape.py:28(__init__)
+   707284    0.801    0.000    1.919    0.000 tensor_shape.py:362(as_dimension)
+   314775    1.390    0.000    4.131    0.000 tensor_shape.py:402(__init__)
+       92    0.000    0.000    0.001    0.000 tensor_shape.py:424(<listcomp>)
+   314409    0.447    0.000    2.137    0.000 tensor_shape.py:436(<listcomp>)
+   353568    0.100    0.000    0.100    0.000 tensor_shape.py:449(dims)
+   353568    0.243    0.000    0.302    0.000 tensor_shape.py:454(ndims)
+      120    0.000    0.000    0.001    0.000 tensor_shape.py:536(merge_with)
+   314347    1.693    0.000    7.965    0.000 tensor_shape.py:675(is_compatible_with)
+       28    0.000    0.000    0.000    0.000 tensor_shape.py:737(is_fully_defined)
+   353984    0.090    0.000    0.090    0.000 tensor_shape.py:74(value)
+       64    0.000    0.000    0.000    0.000 tensor_shape.py:740(<genexpr>)
+      364    0.002    0.000    0.018    0.000 tensor_shape.py:764(as_proto)
+      210    0.001    0.000    0.005    0.000 tensor_shape.py:770(<listcomp>)
+   353564    0.554    0.000    0.873    0.000 tensor_shape.py:79(is_compatible_with)
+   314529    0.775    0.000    5.000    0.000 tensor_shape.py:795(as_shape)
+      120    0.000    0.000    0.000    0.000 tensor_shape.py:803(unknown_shape)
+   122/62    0.000    0.000    0.000    0.000 tensor_util.py:170(_GetDenseDimensions)
+  400/176    0.000    0.000    0.000    0.000 tensor_util.py:180(_FlattenToStrings)
+      122    0.000    0.000    0.000    0.000 tensor_util.py:205(_FirstNotNone)
+   172/60    0.000    0.000    0.001    0.000 tensor_util.py:252(_FilterStr)
+       60    0.000    0.000    0.000    0.000 tensor_util.py:254(<listcomp>)
+        2    0.000    0.000    0.000    0.000 tensor_util.py:267(_FilterNotTensor)
+       62    0.000    0.000    0.001    0.000 tensor_util.py:294(_AssertCompatible)
+       62    0.000    0.000    0.001    0.000 tensor_util.py:296(<listcomp>)
+       62    0.003    0.000    0.022    0.000 tensor_util.py:305(make_tensor_proto)
+       62    0.000    0.000    0.001    0.000 tensor_util.py:444(<listcomp>)
+        2    0.000    0.000    0.000    0.000 threading.py:1083(name)
+        2    0.000    0.000    0.000    0.000 threading.py:1233(current_thread)
+    98344    2.173    0.000  159.014    0.002 to_appear_node.py:21(rollout)
+   245309    1.036    0.000   17.586    0.000 to_appear_node.py:24(getChildNodeToEvaluate)
+   245309    0.638    0.000    6.429    0.000 to_appear_node.py:30(getOrCreateNode)
+   136709    0.315    0.000    0.565    0.000 to_appear_node.py:8(__init__)
+   136709    0.321    0.000    0.886    0.000 to_play_node.py:10(__init__)
+  1216309    8.687    0.000    9.026    0.000 to_play_node.py:14(value)
+    92882    0.273    0.000    0.442    0.000 to_play_node.py:19(__init__)
+    93856    0.223    0.000    5.836    0.000 to_play_node.py:32(rollout)
+     1922    0.008    0.000    0.021    0.000 to_play_node.py:35(bestChild)
+     6874    0.002    0.000    0.002    0.000 to_play_node.py:37(<lambda>)
+   343653    1.239    0.000   88.461    0.000 to_play_node.py:39(getChildNodeToEvaluate)
+  1216309    0.999    0.000   10.025    0.000 to_play_node.py:41(<lambda>)
+   345575    1.261    0.000   75.586    0.000 to_play_node.py:43(get_possible_children)
+    39219    0.257    0.000    1.142    0.000 to_play_node.py:55(<listcomp>)
+      330    0.000    0.000    0.000    0.000 type_checkers.py:101(CheckValue)
+      582    0.002    0.000    0.004    0.000 type_checkers.py:129(CheckValue)
+     6778    0.009    0.000    0.015    0.000 type_checkers.py:173(CheckValue)
+        2    0.000    0.000    0.000    0.000 variables.py:1036(global_variables)
+        2    0.000    0.000    0.000    0.000 variables.py:1060(_all_saveable_objects)
+        2    0.000    0.000    0.003    0.002 variables.py:1128(variables_initializer)
+        2    0.000    0.000    0.000    0.000 variables.py:1149(<listcomp>)
+        2    0.000    0.000    0.003    0.002 variables.py:1159(global_variables_initializer)
+        2    0.000    0.000    0.003    0.002 variables.py:1170(initialize_all_variables)
+       28    0.000    0.000    0.000    0.000 variables.py:404(_ref)
+       28    0.000    0.000    0.000    0.000 variables.py:632(_TensorConversionFunction)
+       28    0.000    0.000    0.000    0.000 variables.py:690(initializer)
+        4    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x0000000067DCAB40}
+        1    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_encode}
+   712862    3.565    0.000   24.502    0.000 {built-in method _functools.reduce}
+        1    0.000    0.000    0.000    0.000 {built-in method _locale._getdefaultlocale}
+      560    0.000    0.000    0.000    0.000 {built-in method _operator.getitem}
+       46    0.000    0.000    0.000    0.000 {built-in method _struct.pack}
+        4    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+        4    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+    19774    0.006    0.000    0.006    0.000 {built-in method _weakref.proxy}
+      120    0.000    0.000    0.002    0.000 {built-in method builtins.all}
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+        1    0.000    0.000  277.286  277.286 {built-in method builtins.exec}
+   865616    1.201    0.000    1.201    0.000 {built-in method builtins.getattr}
+       74    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+   336269    0.159    0.000    0.159    0.000 {built-in method builtins.hash}
+  1532946    0.289    0.000    0.289    0.000 {built-in method builtins.id}
+  7407587    2.666    0.000    4.625    0.000 {built-in method builtins.isinstance}
+  146/139    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+   455106    0.185    0.000    0.185    0.000 {built-in method builtins.iter}
+1443501/1441083    0.323    0.000    0.325    0.000 {built-in method builtins.len}
+   345702    1.624    0.000   11.651    0.000 {built-in method builtins.max}
+551284/550884    0.594    0.000    2.978    0.000 {built-in method builtins.next}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+     4902    0.005    0.000    0.026    0.000 {built-in method builtins.setattr}
+      326    0.001    0.000    0.001    0.000 {built-in method builtins.sorted}
+        1    0.000    0.000    0.000    0.000 {built-in method io.open}
+        1    0.000    0.000    0.000    0.000 {built-in method nt._isdir}
+        2    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
+        1    0.000    0.000    0.000    0.000 {built-in method nt.mkdir}
+        1    0.000    0.000    0.000    0.000 {built-in method nt.stat}
+  4809512   14.244    0.000   14.244    0.000 {built-in method numpy.core.multiarray.array}
+   137563    1.026    0.000    1.026    0.000 {built-in method numpy.core.multiarray.concatenate}
+   592806    1.914    0.000    1.914    0.000 {built-in method numpy.core.multiarray.where}
+    11813    0.048    0.000    0.048    0.000 {built-in method numpy.core.multiarray.zeros}
+   192200    9.658    0.000    9.658    0.000 {built-in method roller.roller}
+        4    0.000    0.000    0.000    0.000 {built-in method sys._getframe}
+      126    0.000    0.000    0.000    0.000 {built-in method sys.exc_info}
+       64    0.004    0.000    0.004    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.RunCppShapeInference}
+   137567    0.445    0.000    0.445    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_DeleteBuffer}
+        2    0.000    0.000    0.000    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_DeleteSessionOptions}
+   137637    0.167    0.000    0.167    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_DeleteStatus}
+        4    0.037    0.009    0.037    0.009 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_ExtendGraph}
+   137637    0.269    0.000    0.269    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_GetCode}
+   137567    0.806    0.000    1.902    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_NewBuffer}
+        2    0.006    0.003    0.006    0.003 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_NewDeprecatedSession}
+   137637    0.294    0.000    0.294    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_NewStatus}
+   137567   51.212    0.000   51.212    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal.TF_Run}
+        2    0.000    0.000    0.000    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal._TF_NewSessionOptions}
+        2    0.000    0.000    0.000    0.000 {built-in method tensorflow.python._pywrap_tensorflow_internal._TF_SetTarget}
+        6    0.000    0.000    0.000    0.000 {built-in method time.time}
+        4    0.000    0.000    0.000    0.000 {method '__reduce_ex__' of 'object' objects}
+        6    0.000    0.000    0.000    0.000 {method '__subclasses__' of 'type' objects}
+        4    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.RLock' objects}
+      218    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+   865290    0.874    0.000    7.495    0.000 {method 'all' of 'numpy.ndarray' objects}
+  1386056    0.586    0.000    0.586    0.000 {method 'append' of 'list' objects}
+   345575    0.087    0.000    0.087    0.000 {method 'bit_length' of 'int' objects}
+      252    0.000    0.000    0.000    0.000 {method 'decode' of 'bytes' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+   465411    0.473    0.000    0.473    0.000 {method 'encode' of 'str' objects}
+     2980    0.002    0.000    0.002    0.000 {method 'extend' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 {method 'flush' of '_io.TextIOWrapper' objects}
+  2484370    1.467    0.000    6.143    0.000 {method 'get' of 'dict' objects}
+   572404    0.266    0.000    0.266    0.000 {method 'getrandbits' of '_random.Random' objects}
+      308    0.000    0.000    0.000    0.000 {method 'getvalue' of '_io.BytesIO' objects}
+   462251    0.152    0.000    0.152    0.000 {method 'items' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 {method 'keys' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+      198    0.001    0.000    0.001    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+    10987    0.003    0.000    0.003    0.000 {method 'pack' of 'Struct' objects}
+      420    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+   137803    0.137    0.000    0.137    0.000 {method 'pop' of 'list' objects}
+   345575    0.086    0.000    0.086    0.000 {method 'random' of '_random.Random' objects}
+   963696    6.536    0.000    6.536    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+        4    0.000    0.000    0.000    0.000 {method 'release' of '_thread.RLock' objects}
+        7    0.000    0.000    0.000    0.000 {method 'remove' of 'set' objects}
+        6    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+   137563    0.927    0.000    0.927    0.000 {method 'reshape' of 'numpy.ndarray' objects}
+      126    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
+        6    0.000    0.000    0.000    0.000 {method 'rfind' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+     7492    0.002    0.000    0.002    0.000 {method 'setdefault' of 'dict' objects}
+    18214    0.031    0.000    0.040    0.000 {method 'sort' of 'list' objects}
+       18    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+       20    0.000    0.000    0.000    0.000 {method 'startswith' of 'bytes' objects}
+       88    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+   336269    0.212    0.000    0.212    0.000 {method 'tobytes' of 'numpy.ndarray' objects}
+   192200    0.344    0.000    0.344    0.000 {method 'tolist' of 'numpy.ndarray' objects}
+        4    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+       16    0.000    0.000    0.000    0.000 {method 'upper' of 'str' objects}
+       64    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
+    26947    0.006    0.000    0.006    0.000 {method 'write' of '_io.BytesIO' objects}
+        5    0.000    0.000    0.000    0.000 {method 'write' of '_io.TextIOWrapper' objects}
+
+
+
+Process finished with exit code 0
