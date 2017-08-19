@@ -1,5 +1,6 @@
 import numpy
 from sklearn import linear_model
+from sklearn import metrics
 from board import all_moves
 from board_features import board_as_feature_array, move_as_one_hot_encoding, board_as_feature_array_with_sum
 from predict_moves import PriorNet
@@ -23,7 +24,8 @@ def get_values(boards):
 def linear_loss(train_x, train_y, test_x, test_y):
     model = linear_model.LinearRegression()
     model.fit(numpy.array(train_x).reshape(-1, 1), train_y)
-    return model.score(numpy.array(test_x).reshape(-1, 1), test_y)
+    pred_y = model.predict(numpy.array(test_x).reshape(-1, 1))
+    return metrics.mean_squared_error(pred_y, test_y)
 
 
 class Nets(object):

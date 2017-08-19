@@ -13,10 +13,9 @@ dropout = 0.5
 
 def accuracy_matrix(pred, labels):
     size = 4
+    total = len(labels)
     for i in range(size):
         for j in range(size):
-            total = sum([a[i] for a in labels])
-
             matches = sum([a[j] * b[i] for a, b in zip(pred, labels)])
             print("%.3f" % (matches / total), end=",")
         print()
@@ -54,7 +53,7 @@ with entropy_graph.as_default():
 
     # Training computation.
     predictions = tf.reshape(calc(X, keep_param), [-1])
-    loss = tf.reduce_mean(tf.nn.l2_loss(predictions - Y)) / tf.cast(tf.shape(Y)[0], tf.float32)
+    loss = tf.nn.l2_loss(predictions - Y) / tf.cast(tf.shape(Y)[0], tf.float32)
 
     # Optimizer.
     optimizer = tf.train.AdamOptimizer(1e-4).minimize(loss)
