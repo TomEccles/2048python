@@ -6,7 +6,8 @@ from file_utils import open_creating_dir_if_needed
 from move_player import MovePlayer
 from nets import Nets
 
-runs_root = "../results/runs"
+runs_root = "~/PycharmProjects/2048python-new/results/runs"
+vanilla_data_path = runs_root + "/vanilla/output/data"
 
 def play_game(evals, nets):
     to_move_boards = []
@@ -65,6 +66,12 @@ def train(nets, game_batch, passes, turns, valid_batch, path, runs=-1):
             pickle.dump([boards, labels, a_boards, results], file)
 
 
+def get_vanilla_data(turns, games):
+    nets = Nets(0, 0)
+    boards, labels, a_boards, results = get_data(games, nets, turns)
+    with open_creating_dir_if_needed(vanilla_data_path, "w") as file:
+        pickle.dump([boards, labels, a_boards, results], file)
+
 def pickle_load(filename):
     with open(filename, "rb") as file:
         d, l, a, r = pickle.load(file)
@@ -105,11 +112,11 @@ def test_outputs():
 
 
 def train_from_vanilla():
-    vanilla_data_path = runs_root + "/vanilla/output/data_2"
+    vanilla_data_path = runs_root + "/vanilla/output/data"
     load_vanilla_data_and_train(vanilla_data_path)
     run_path = runs_root + "/run%f/" % time.time()
     nets = Nets(100, 10)
-    train(nets, game_batch=1, turns=1, passes=1, valid_batch=1, path=run_path, runs=1)
+    train(nets, game_batch=1, turns=100, passes=1, valid_batch=1, path=run_path, runs=1)
 
 
 def run_one_game():
