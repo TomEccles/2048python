@@ -1,35 +1,26 @@
-import roller
-import random
 import numpy as np
+import roller
 
-from board import Board, Move
+from board import Board
 
 
-def rolloutFromMoveC(b):
+def __rollout_from_move_c(b):
     m = roller.roller(b.board.tolist())
     return m
 
 
-def rolloutFromMove(b):
-    return rolloutFromMoveC(b)
+def rollout_from_move(b):
+    return __rollout_from_move_c(b)
 
 
 def rollout_from_appear(b):
-    b.add_random()
-    return rolloutFromMove(b)
+    b = b.add_random()
+    return rollout_from_move(b)
 
 
 if __name__ == "__main__":
     a = np.array([[1, 4, 7, 10], [1, 4, 7, 10], [1, 4, 7, 10], [1, 4, 7, 10]])
     s1 = 0
-    s2 = 0
-    b = Board(a)
     for i in range(1000):
-        b = Board(a)
-        m = rolloutFromMoveC(b)
-        s1 += m
-    for i in range(1000):
-        b = Board(a)
-        m = rolloutFromMovePython(b)
-        s2 += m
-    print(s1, s2)
+        s1 += rollout_from_move(Board(a))
+    print(s1)

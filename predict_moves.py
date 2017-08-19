@@ -11,13 +11,13 @@ nodes_1 = 512
 dropout = 0.5
 
 
-def accuracy_matrix(pred, labels):
+def accuracy_matrix(predictions, labels):
     size = 4
     for i in range(size):
         for j in range(size):
             total = sum([a[i] for a in labels])
 
-            matches = sum([a[j] * b[i] for a, b in zip(pred, labels)])
+            matches = sum([a[j] * b[i] for a, b in zip(predictions, labels)])
             print("%.3f" % (matches / total), end=",")
         print()
 
@@ -86,14 +86,13 @@ class PriorNet(object):
         for p in range(passes):
             permuted_data, permuted_labels = permute(dataset, labels)
             gates = np.array([a[-4:] for a in permuted_data])
-            permuted_data = permuted_data[:,:-4]
+            permuted_data = permuted_data[:, :-4]
             for i in range(int(len(dataset) / batch_size)):
                 batch_data = permuted_data[i * batch_size:(i + 1) * batch_size]
                 batch_labels = permuted_labels[i * batch_size:(i + 1) * batch_size]
-                batch_gates= gates[i * batch_size:(i + 1) * batch_size]
+                batch_gates = gates[i * batch_size:(i + 1) * batch_size]
                 feed_dict = {X: batch_data, Y: batch_labels, g: batch_gates, keep_param: 1 - dropout}
                 _, l, p = self.session.run([optimizer, loss, pred], feed_dict=feed_dict)
-                a = 0
 
     def save(self, save_path):
         create_dir_if_needed(save_path)
@@ -102,7 +101,7 @@ class PriorNet(object):
 
     def validate_observations(self, dataset, labels):
         gates = np.array([a[-4:] for a in dataset])
-        dataset = dataset[:,:-4]
+        dataset = dataset[:, :-4]
         p, l = self.session.run([pred, loss], {X: dataset, Y: labels, g: gates, keep_param: 1})
         a = accuracy(p, labels)
         print("Validation accuracy: %.1f%%" % a)

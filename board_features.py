@@ -2,6 +2,7 @@ import numpy
 
 from board import all_moves, Board, Move
 
+sum_normalisation = 1000
 
 def compare(array):
     return numpy.array([(1 if array[i] > array[j] > 0 else 0) for i in range(16) for j in range(16)])
@@ -28,7 +29,9 @@ def board_as_feature_array(board):
 def board_as_feature_array_with_sum(board):
     board_array = numpy.reshape(board.board, 16)
     return numpy.concatenate(
-        (numpy.copy(board_array) / 10.0, non_zero(board_array), compare(board_array), possible_moves(board), numpy.array([numpy.sum(board_array)/1000])))
+        (numpy.copy(board_array) / 10.0, non_zero(board_array), compare(board_array), possible_moves(board),
+         numpy.array([numpy.sum(board_array) / sum_normalisation])))
+
 
 def move_as_one_hot_encoding(move):
     return numpy.array([(1 if move == i else 0) for i in range(4)])

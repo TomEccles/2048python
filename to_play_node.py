@@ -1,5 +1,4 @@
 from board import all_moves
-from board_features import board_as_feature_array
 from indented_printer import IndentedPrinter
 from node import Node
 from rollout import *
@@ -12,7 +11,7 @@ class NodeWithPriorAndValue(ToAppearNode):
         self.prior = prior
 
     def value(self):
-        return (self.score + 1000 + self.prior*self.nets.get_prior_weight()) / (self.games + 1)
+        return (self.score + 1000 + self.prior * self.nets.get_prior_weight()) / (self.games + 1)
 
 
 class ToPlayNode(Node):
@@ -29,7 +28,7 @@ class ToPlayNode(Node):
             [c.print(depth + 1) for c in self.children]
 
     def rollout(self):
-        return rolloutFromMove(self.board.copy())
+        return rollout_from_move(self.board.copy())
 
     def bestChild(self):
         options = self.get_possible_children()
@@ -43,7 +42,6 @@ class ToPlayNode(Node):
         if self.children is not None:
             return self.children
 
-        # Bias the evaluation towards likely candidates - unless we're the root node, in which case we should be fair
         priors = self.nets.get_priors(self.board)
 
         boards = []
@@ -54,6 +52,6 @@ class ToPlayNode(Node):
         values = self.nets.get_values([board[0] for board in boards])
 
         self.children = [NodeWithPriorAndValue(board_and_prior[0], self, board_and_prior[1], value, self.nets) for
-                         board_and_prior, value in zip(boards,values)]
+                         board_and_prior, value in zip(boards, values)]
 
         return self.children

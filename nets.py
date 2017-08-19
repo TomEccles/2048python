@@ -1,9 +1,11 @@
 import numpy
-
+from sklearn import linear_model
 from board import all_moves
 from board_features import board_as_feature_array, move_as_one_hot_encoding, board_as_feature_array_with_sum
 from predict_moves import PriorNet
 from predict_values import ValuerNet
+
+value_normalisation = 1000
 
 
 def get_values(boards):
@@ -14,12 +16,18 @@ def get_values(boards):
     for index, board in enumerate(boards):
         if index > ends[game]:
             game += 1
-        values.append((ends[game] - index)/1000)
+        values.append((ends[game] - index) / value_normalisation)
     return values
 
 
+def linear_loss(train_x, train_y, test_x, test_y):
+    model = linear_model.LinearRegression()
+    model.fit(numpy.array(train_x).reshape(-1, 1), train_y)
+    return model.score(numpy.array(test_x).reshape(-1, 1), test_y)
+
+
 class Nets(object):
-    def __init__(self, prior_weight, value_weight, predictor_to_load, valuer_to_load):
+    def __init__(self, prior_weight, value_weight, predictor_to_load=None, valuer_to_load=None):
         self.prior_weight = prior_weight
         self.predictor = PriorNet()
         if predictor_to_load is not None:
@@ -43,7 +51,7 @@ class Nets(object):
 
     def get_values(self, boards):
         if self.value_weight == 0:
-            return [0 for i in boards]
+            return [0 for _ in boards]
         if not boards:
             return []
         return self.valuer.run_forward([board_as_feature_array_with_sum(board) for board in boards])
@@ -57,17 +65,20 @@ class Nets(object):
                                          passes)
 
     def validate_observations(self, move_boards, moves, appear_boards):
-        self.predictor.validate_observations(numpy.array([board_as_feature_array(board) for board in move_boards]),
-                                             numpy.array([move_as_one_hot_encoding(l) for l in moves]))
-        self.valuer.validate_observations(numpy.array([board_as_feature_array_with_sum(board) for board in appear_boards]),
-                                          numpy.array(get_values(appear_boards)))
-        sums = [numpy.sum(b.board)/1000 for b in appear_boards]
-        values = get_values(appear_boards)
-        diffs = [sums[i] + values[i] for i in range(len(sums))]
-        average_diff = sum(diffs) / len(diffs)
-        preds = [max(average_diff - s, 0) for s in sums]
-        errors = [(preds[i] - values[i])**2 for i in range(len(preds))]
-        loss = sum(errors) / len(errors)
+        self.predictor.validate_observations(
+            numpy.array([board_as_feature_array(board) for board in move_boards]),
+            numpy.array([move_as_one_hot_encoding(l) for l in moves]))
+        self.valuer.validate_observations(
+            numpy.array([board_as_feature_array_with_sum(board) for board in appear_boards]),
+            numpy.array(get_values(appear_boards)))
+
+        move_sums = [numpy.sum(b.board) for b in move_boards]
+        move_values = get_values(move_boards)
+
+        appear_sums = [numpy.sum(b.board) for b in appear_boards]
+        appear_values = get_values(move_boards)
+
+        loss = linear_loss(move_sums, move_values, appear_sums, appear_values)
         print("loss from sums, rms: %.4f %.4f" % (loss, loss ** 0.5))
 
     def save(self, predict_path, value_path):

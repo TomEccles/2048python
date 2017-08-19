@@ -41,7 +41,7 @@ def calc(x, keep_param=1):
 
 with entropy_graph.as_default():
     X = tf.placeholder(tf.float32, shape=(None, num_inputs))
-    Y = tf.placeholder(tf.float32, shape=(None))
+    Y = tf.placeholder(tf.float32, shape=None)
     keep_param = tf.placeholder(tf.float32)
 
     # Variables.
@@ -53,7 +53,7 @@ with entropy_graph.as_default():
     biases_3 = tf.Variable(tf.zeros([1]))
 
     # Training computation.
-    predictions = tf.reshape(calc(X, keep_param),[-1])
+    predictions = tf.reshape(calc(X, keep_param), [-1])
     loss = tf.reduce_mean(tf.nn.l2_loss(predictions - Y)) / tf.cast(tf.shape(Y)[0], tf.float32)
 
     # Optimizer.
@@ -83,11 +83,10 @@ class ValuerNet:
 
     def validate_observations(self, dataset, labels):
         p, l = self.session.run([predictions, loss], {X: dataset, Y: labels, keep_param: 1})
-        print("Validation loss, root mean square: %.4f %.4f" % (l, l**.5))
+        print("Validation loss, root mean square: %.4f %.4f" % (l, l ** .5))
 
-
-    def run_forward(self, input):
-        p = self.session.run([predictions], {X: input, keep_param: 1})
+    def run_forward(self, dataset):
+        p = self.session.run([predictions], {X: dataset, keep_param: 1})
         return p[0]
 
     def load(self, save_path):
