@@ -120,7 +120,8 @@ def load_vanilla_data_and_train():
 def train_from_vanilla():
     run_path = runs_root + "/run%.0f" % time.time()
     nets = Nets(100, 10)
-    train(nets, game_batch=100, evals=10, passes=10, valid_batch=10, path=run_path, runs=2)
+    train(nets, game_batch=100, evals=100, passes=5, valid_batch=10, path=run_path, runs=-1)
+
 
 def test_outputs():
     load_path = runs_root + "/run1499671533/checkpoints/"
@@ -128,7 +129,7 @@ def test_outputs():
     evals = 100
     while True:
         nets = Nets(100, 10, load_path + "predict_iter_11.ckpt", load_path + "value_iter_11.ckpt")
-        get_data(10, nets, evals, run_path + "last_iter_no_root.txt")
+        get_data(10, nets, evals, run_path + "last_iter.txt")
 
 # cProfile.run('run_one_game()')
-test_outputs()
+train_from_vanilla()

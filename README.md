@@ -3,3 +3,16 @@
 - Does a Monte Carlo tree search, guided by a neural network which has learned to predict the bot's moves
 - Values leaves in the tree using rollouts and another neural network
 The rollouts are in C++ for speed, everything else is Python with Tensorflow.
+
+The rollout policy is not random - it tries to gather things in the top left:
+- Move up if possible
+- Else move left or right randomly - but prefer left if moving right would affect the top row
+- Else move down
+This produces better results than random or deterministic up>left>right>down
+
+Approximate setup instructions
+- Prerequisites are python 3.5, visual studio 2015
+- Update Python2048Extension.vcxproj to have your python include path rather than mine (yes, sorry)
+- Run build_extension.sh
+
+The entry point is game_runner.py
