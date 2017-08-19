@@ -28,5 +28,5 @@ class Analyser:
             print((name, len(turns), mean(turns), max(turns), mean_std(turns)))
 
 
-a = Analyser("./runs/test2")
+a = Analyser("./results/runs/test")
 a.get_stats()

@@ -122,6 +122,13 @@ def train_from_vanilla():
     nets = Nets(100, 10)
     train(nets, game_batch=100, evals=10, passes=10, valid_batch=10, path=run_path, runs=2)
 
+def test_outputs():
+    load_path = runs_root + "/run1499671533/checkpoints/"
+    run_path = runs_root + "/test/"
+    evals = 100
+    while True:
+        nets = Nets(100, 10, load_path + "predict_iter_11.ckpt", load_path + "value_iter_11.ckpt")
+        get_data(10, nets, evals, run_path + "last_iter_no_root.txt")
 
 # cProfile.run('run_one_game()')
-train_from_vanilla()
+test_outputs()
