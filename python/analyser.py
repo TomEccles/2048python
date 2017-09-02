@@ -32,11 +32,11 @@ class Analyser:
 a = Analyser("./results/runs/run1504073134/output")
 
 a.get_stats()
-#
-# file_name = "./results/runs/policy_test/results.txt"
-# block = 2000
-# with open(file_name, "r") as file:
-#     turns = [int(line.split(" ")[0]) for line in file.readlines()]
-#     for i in range(len(turns) // block):
-#         a = turns[i*block : (i+1)*block]
-#         print(i*block, (i+1)*block - 1, mean(a), max(a), mean_std(a))
+
+file_name = "./results/runs/policy_test_3/results.txt"
+block = 1000
+with open(file_name, "r") as file:
+    turns = [int(line.split(" ")[0]) for line in file.readlines()]
+    for i in range(len(turns) // block):
+        a = turns[i*block : (i+1)*block]
+        print(i*block, (i+1)*block - 1, mean(a), max(a), mean_std(a))
