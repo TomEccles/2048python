@@ -2,7 +2,7 @@ import numpy
 from sklearn import linear_model
 from sklearn import metrics
 from board import all_moves
-from board_features import board_as_feature_array, move_as_one_hot_encoding, board_as_feature_array_with_sum
+from board_features import board_as_feature_array, move_as_one_hot_encoding, board_as_feature_array
 from predict_moves import PriorNet
 from predict_values import ValuerNet
 
@@ -56,22 +56,25 @@ class Nets(object):
             return [0 for _ in boards]
         if not boards:
             return []
-        return self.valuer.run_forward([board_as_feature_array_with_sum(board) for board in boards])
+        return self.valuer.run_forward([board_as_feature_array(board) for board in boards])
 
     def feed_observations(self, move_boards, moves, appear_boards, passes):
-        self.valuer.feed_observations(numpy.array([board_as_feature_array_with_sum(board) for board in appear_boards]),
+        self.valuer.feed_observations(numpy.array([board_as_feature_array(board) for board in appear_boards]),
                                       numpy.array(get_values(appear_boards)),
                                       passes)
-        self.predictor.feed_observations(numpy.array([board_as_feature_array(board) for board in move_boards]),
-                                         numpy.array([move_as_one_hot_encoding(l) for l in moves]),
+
+        board_arrays = numpy.array([board_as_feature_array(board) for board in move_boards])
+        self.predictor.feed_observations(board_arrays,
+                                         numpy.array([move_as_one_hot_encoding(l, b) for (l, b) in zip(moves, board_arrays)]),
                                          passes)
 
     def validate_observations(self, move_boards, moves, appear_boards):
+        board_arrays = numpy.array([board_as_feature_array(board) for board in move_boards])
         self.predictor.validate_observations(
-            numpy.array([board_as_feature_array(board) for board in move_boards]),
-            numpy.array([move_as_one_hot_encoding(l) for l in moves]))
+            numpy.array(board_arrays),
+            numpy.array([move_as_one_hot_encoding(l, b) for (l, b) in zip(moves, board_arrays)]))
         self.valuer.validate_observations(
-            numpy.array([board_as_feature_array_with_sum(board) for board in appear_boards]),
+            numpy.array([board_as_feature_array(board) for board in appear_boards]),
             numpy.array(get_values(appear_boards)))
 
         move_sums = [numpy.sum(b.board) for b in move_boards]

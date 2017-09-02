@@ -23,18 +23,14 @@ def possible_moves(board):
 def board_as_feature_array(board):
     board_array = numpy.reshape(board.board, 16)
     return numpy.concatenate(
-        (numpy.copy(board_array) / 10.0, non_zero(board_array), compare(board_array), possible_moves(board)))
-
-
-def board_as_feature_array_with_sum(board):
-    board_array = numpy.reshape(board.board, 16)
-    return numpy.concatenate(
         (numpy.copy(board_array) / 10.0, non_zero(board_array), compare(board_array), possible_moves(board),
          numpy.array([numpy.sum(board_array) / sum_normalisation])))
 
 
-def move_as_one_hot_encoding(move):
-    return numpy.array([(1 if move == i else 0) for i in range(4)])
+def move_as_one_hot_encoding(move, board_array, m=0):
+    gates = board_array[-4:]
+    n = numpy.sum(gates)
+    return numpy.array([(1-(n-1)*m if move == i else m*gates[i]) for i in range(4)])
 
 
 def main():
@@ -44,7 +40,7 @@ def main():
     board = board.move(Move.up)
     board.print()
     print(board_as_feature_array(board))
-    print(board_as_feature_array_with_sum(board))
+    print(board_as_feature_array(board))
     for move in all_moves:
         print(move_as_one_hot_encoding(move))
 
