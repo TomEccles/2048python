@@ -33,3 +33,6 @@ class PolicyPlayer(object):
                                                        zip(moves, board_arrays)]),
                                           numpy.array([[v] for v in values]),
                                           passes)
+
+    def save(self, path):
+        self.predictor.save(path)

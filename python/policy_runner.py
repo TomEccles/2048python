@@ -24,11 +24,18 @@ def train_policy(game_batch, passes, runs):
     def get_move_policy(b):
         return b.move(trainer.get_move(b))
     r = 0
+    max_average = 0
     while r != runs:
-        to_move_boards, l, _, _, res = game_player.get_data(game_batch, get_move_policy, values, runs_root + "/policy_test_2/results.txt")
+        to_move_boards, l, _, scores, res = game_player.get_data(game_batch, get_move_policy, values, runs_root + "/policy_test_3/results.txt")
         r += 1
         res = normalise(res)
         trainer.feed_observations(to_move_boards, l, res, passes)
+        average = sum(scores) / len(scores)
+        if average < max_average - 3:
+            break
+        else:
+            max_average = max(max_average, average)
+            trainer.save(runs_root + "/policy_test_4/checkpoint/checkpoint_%i.ckpt" % r)
 
 
 train_policy(game_batch=1000, passes=10, runs=-1)
