@@ -102,7 +102,6 @@ class Board:
         return copy
 
     def __move_in_place(self, move):
-        """Returns a new copy"""
         if move == Move.up:
             return apply_to_rows_returning_or(self.board.T, self.squish_cached)
         elif move == Move.down:

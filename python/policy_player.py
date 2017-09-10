@@ -1,7 +1,7 @@
 import random
 
 from board_features import *
-from predict_moves import PriorNet
+from predict_moves import PolicyNetwork
 
 
 def move_from_distribution(dist):
@@ -16,10 +16,8 @@ def move_from_distribution(dist):
 
 
 class PolicyPlayer(object):
-    def __init__(self, predictor_to_load=None):
-        self.predictor = PriorNet()
-        if predictor_to_load is not None:
-            self.predictor.load(predictor_to_load)
+    def __init__(self, predictor=None):
+        self.predictor = PolicyNetwork() if predictor is None else predictor
 
     def get_move(self, board):
         options = self.predictor.run_forward(board_as_feature_array(board))

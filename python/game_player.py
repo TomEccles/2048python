@@ -2,7 +2,15 @@ import time
 
 from board import Board, all_moves
 from file_utils import open_creating_dir_if_needed
-from policy_player import PolicyPlayer
+
+
+class GameBatchResult(object):
+    def __init__(self, to_move_boards, moves, to_appear_boards, game_scores, action_values):
+        self.to_move_boards = to_move_boards
+        self.moves = moves
+        self.to_appear_boards = to_appear_boards
+        self.game_scores = game_scores
+        self.action_values = action_values
 
 
 def play_game(get_move):
@@ -54,4 +62,4 @@ def get_data(games, get_move, values=no_values, results_file=None):
         if results_file:
             with open_creating_dir_if_needed(results_file, 'a') as file:
                 file.write("%d %f\n" % (score, t))
-    return to_move_boards, labels, to_appear_boards, results, move_scores
+    return GameBatchResult(to_move_boards, labels, to_appear_boards, results, move_scores)

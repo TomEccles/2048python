@@ -2,7 +2,7 @@ import os
 
 from policy_player import PolicyPlayer
 import game_player
-
+from predict_moves import PolicyNetwork
 
 runs_root = "./results/runs"
 
@@ -17,25 +17,25 @@ def normalise(res):
     return [(r-m) / std for r in res]
 
 
-def train_policy(game_batch, passes, runs):
-    load_path = "./results/runs/run1504073134/checkpoints/predict_iter_7.ckpt"
-
-    trainer = PolicyPlayer(load_path)
+def train_policy(player, game_batch, passes, runs, result_path):
     def get_move_policy(b):
-        return b.move(trainer.get_move(b))
+        return b.move(player.get_move(b))
     r = 0
     max_average = 0
     while r != runs:
-        to_move_boards, l, _, scores, res = game_player.get_data(game_batch, get_move_policy, values, runs_root + "/policy_test_3/results.txt")
+        batch_result = game_player.get_data(game_batch, get_move_policy, values, result_path(r))
         r += 1
-        res = normalise(res)
-        trainer.feed_observations(to_move_boards, l, res, passes)
-        average = sum(scores) / len(scores)
+        normalised_action_vals = normalise(batch_result.action_values)
+        player.feed_observations(batch_result.to_move_boards, batch_result.moves, normalised_action_vals, passes)
+        average = sum(batch_result.game_scores) / len(batch_result.game_scores)
         if average < max_average - 3:
             break
         else:
             max_average = max(max_average, average)
-            trainer.save(runs_root + "/policy_test_4/checkpoint/checkpoint_%i.ckpt" % r)
 
 
-train_policy(game_batch=1000, passes=10, runs=-1)
+# load_path = "./results/runs/run1504073134/checkpoints/predict_iter_7.ckpt"
+# net = PolicyNetwork()
+# net.load(load_path)
+# trainer = PolicyPlayer(net)
+# train_policy(trainer, game_batch=1000, passes=10, runs=-1)

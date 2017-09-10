@@ -81,7 +81,7 @@ with prior_graph.as_default():
 
 
 
-class PriorNet(object):
+class PolicyNetwork(object):
     def __init__(self):
         self.session = tf.Session(graph=prior_graph)
         with prior_graph.as_default():
