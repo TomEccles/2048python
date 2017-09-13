@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 
 
 def mean(array):
@@ -31,12 +32,16 @@ class Analyser:
 a = Analyser("./results/runs/full_run/output")
 
 a.get_stats()
-#
-#
-# file_name = "./results/runs/policy_test_3/results.txt"
-# block = 1000
-# with open(file_name, "r") as file:
-#     turns = [int(line.split(" ")[0]) for line in file.readlines()]
-#     for i in range(len(turns) // block):
-#         a = turns[i*block : (i+1)*block]
-#         print(i*block, (i+1)*block - 1, mean(a), max(a), mean_std(a))
+
+
+file_name = "./results/runs/full_run/output/search_results.txt"
+res = defaultdict(list)
+with open(file_name, "r") as file:
+    lines = [[int(i) for i in line.split(" ")] for line in file.readlines()]
+    for l in lines:
+        t = (l[0], l[1])
+        res[t].append(l[2])
+keys = list(res.keys())
+keys.sort()
+for k in keys:
+    print(k, mean(res[k]), mean_std(res[k]))

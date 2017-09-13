@@ -54,7 +54,8 @@ def train_value_only(nets, game_batch, passes, evals, valid_batch, path, runs=-1
         count += 1
         train_batch = game_player.get_data(game_batch,
                                           get_move_mcts(nets, evals),
-                                          results_file=path + "/output/results_iter_%i.txt" % count)
+                                          results_file="%s%i.txt" % (path, count))
+
         valid_batch = game_player.get_data(valid_batch, get_move_mcts(nets, evals))
 
         nets.train_valuer(train_batch, passes)

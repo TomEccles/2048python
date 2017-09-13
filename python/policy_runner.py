@@ -23,7 +23,7 @@ def train_policy(player, game_batch, passes, runs, result_path):
     r = 0
     max_average = 0
     while r != runs:
-        batch_result = game_player.get_data(game_batch, get_move_policy, values, result_path(r))
+        batch_result = game_player.get_data(game_batch, get_move_policy, values, "%s%i.txt" % (result_path, r))
         r += 1
         normalised_action_vals = normalise(batch_result.action_values)
         player.feed_observations(batch_result.to_move_boards, batch_result.moves, normalised_action_vals, passes)
