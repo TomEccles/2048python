@@ -68,7 +68,7 @@ def search_weights():
     base_value_weight = 10
     max_prior_weight = 300
     max_value_weight = 30
-    steps = 10
+    steps = 5
     nets = Nets(0, 0, policy_to_load=s2_policy_path, valuer_to_load=s3_value_path)
     while True:
         rand_prior_weight = random.randint(0, steps) * max_prior_weight/steps

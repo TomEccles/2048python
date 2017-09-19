@@ -15,4 +15,9 @@ Approximate setup instructions
 - Update Python2048Extension.vcxproj to have your python include path rather than mine (yes, sorry)
 - Run build_extension.sh
 
-The entry point is game_runner.py
+full_training_run.py is the main file. This has a training process with four steps:
+- Use MCTS with no neural networks to get a lot of data
+- Use that to train the policy network with supervised learning
+- Improve the policy network with policy gradients
+- Use the resulting network to run some more games
+- Use those to train a value network
